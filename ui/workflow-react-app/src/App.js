@@ -3,11 +3,14 @@ import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-d
 import Login from './pages/Login';
 import Register from './pages/Register';
 import Home from './pages/Home';
-import AuthChecker from './pages/AuthCheck'; // Correct import
+import AuthChecker from './pages/AuthCheck';
+import AuthAlert from './pages/alert/AuthAlert';
 
 
 const App = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [showAuthAlert, setShowAuthAlert] = useState(false);
+  const [errorCode, setErrorCode] = useState(null);
 
   useEffect(() => {
     const token = localStorage.getItem('token');
@@ -19,15 +22,17 @@ const App = () => {
     }
   }, []);
 
+  const closeAuthAlert = () => {
+    setShowAuthAlert(false);
+  };
+
   return (
     <Router>
       <div className="App">
-        <h1>Welcome to My App</h1>
-        <Routes>
-          <Route path="/home"
-            element={isAuthenticated ? <Home /> : <Navigate to="/login" />}
-          />
-          <Route path="/login" element={<Login />} />
+      {showAuthAlert && <AuthAlert errorCode={errorCode} onClose={closeAuthAlert} />}
+      <Routes>
+          <Route path="/home" element={isAuthenticated ? <Home /> : <Navigate to="/login" />} />
+          <Route path="/login" element={<Login setShowAuthAlert={setShowAuthAlert} setErrorCode={setErrorCode} />} />
           <Route path="/register" element={<Register />} />
           <Route path="/auth-check" element={<AuthChecker />} />
         </Routes>

@@ -1,0 +1,120 @@
+body {
+    margin: 0;
+  }
+  
+  .body {
+    display: flex;
+    height: 100vh;
+    flex-direction: row;
+  }
+  
+  .leftPanel {
+    flex: 1;
+    display: flex;
+    float: left;
+    flex-direction: column;
+    background-color: rgb(45, 189, 189);
+    box-sizing: border-box;
+    width: 50%;
+    height: 100%;
+  }
+  
+  .rightPanel {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: rgb(250, 241, 255);
+    box-sizing: border-box;
+    height: 100%;
+  }
+
+  form {
+    display: flex;
+    flex-direction: column;
+    max-width: 90%;
+    margin: auto;
+  }
+  
+  label {
+    margin-bottom: 5px;
+  }
+
+  
+  .register {
+    margin-bottom: 10px;
+    border-radius: 8px;
+  }
+  
+  
+  .registerLabel {
+    margin-left: 50px;
+  }
+
+  
+  form div {
+    display: flex;
+    margin-bottom: 15px;
+    padding-right: 15%;
+  }
+  
+  form div label,
+  form div input {
+    flex: 1;
+    margin-right: 15px;
+    
+  }
+
+  .registerButton{
+    width: 50%;
+    margin-top: -40px;
+    margin-left: 140px;
+  }
+  
+
+  .top-register{
+    position: relative;
+    height: 60%;
+    background-color:rgb(250, 241, 255);
+  }
+
+
+  .registerText{
+    color: rgb(184, 80, 240);;
+    position: relative;
+    font-size: 37px;
+    top: 17%;
+    left: 37%;
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+  }
+  .registerText2{
+    color: rgb(184, 80, 240);;
+    position: relative;
+    font-size: 37px;
+    top: 17%;
+    left: 40%;
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+  }
+  .registerText3{
+    color: rgb(184, 80, 240);;
+    position: relative;
+    font-size: 37px;
+    top: 17%;
+    left: 43%;
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+  }
+  .registerText4{
+    color: rgb(184, 80, 240);;
+    position: relative;
+    font-size: 37px;
+    top: 17%;
+    left: 46%;
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+  }
+
+  .registerH5{
+    padding: 15px;
+    margin: auto;
+    margin-left: 155px;
+  }
+  

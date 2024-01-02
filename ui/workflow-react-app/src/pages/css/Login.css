@@ -1,0 +1,175 @@
+.body {
+    display: flex;
+    height: 100vh;
+  }
+  
+  .left-container {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    background-color: aqua;
+  }
+  
+  .top-div{
+    position: relative;
+    height: 60%;
+    background-color:rgb(250, 241, 255);
+  }
+
+  .top-div .mainText{
+    color: rgb(184, 80, 240);;
+    position: relative;
+    font-size: 37px;
+    top: 7%;
+    left: 27%;
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+  }
+
+  .top-div .supportText{
+    position: absolute;
+    bottom: 0;
+    right: 10%;
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+    font-size: 25px;
+  }
+
+
+  .bottom-div {
+    position: relative;
+    height: 40%;
+    background-color:rgb(250, 241, 255);
+    overflow: hidden;
+  }
+  
+  .circle1 {
+    position: absolute;
+    top: 0;
+    right: 0;
+    transform: translateX(-50%);
+    background-color: rgb(235, 204, 251);
+    height: 500px;
+    width: 500px;
+    border-radius: 50%;
+  }
+
+  .circle2 {
+    position: absolute;
+    top: 40%;
+    right: -20%;
+    transform: translateX(-50%);
+    background-color: rgb(157, 79, 196);
+    height: 500px;
+    width: 500px;
+    border-radius: 50%;
+  }
+
+  .circle3{
+    position: absolute;
+    top: 35%;
+    left: 10;
+    transform: translateX(-50%);
+    background-color: rgb(219, 165, 247);
+    height: 500px;
+    width: 500px;
+    border-radius: 50%;
+  }
+  
+  
+  .right-container {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: rgb(250, 241, 255);
+  }
+  
+  .login-form {
+    text-align: center;
+    background-color: rgb(250, 241, 255);
+    padding: 30px;
+  }
+
+  .login-form h2{
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    color: rgb(191, 80, 250);
+  }
+  
+  label {
+    display: block;
+    text-align: left;
+    margin-bottom: 5px;
+    padding: 0px;
+    margin-bottom:11px;
+  }
+  
+  input {
+    width: 100%;
+    padding: 12px;
+    background-color: rgb(255, 255, 255);
+    color: rgb(0, 0, 0);
+    border-radius: 8px;
+  }
+
+  button {
+    width: 111%;
+    padding: 10px;
+    margin-top:-10%;
+    font-size: 18px; 
+    background-color: rgb(168, 74, 214);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    box-sizing: border-box;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+  }
+
+  
+    button:hover {
+      background-color: rgb(200, 103, 248);
+    }
+  
+
+    h5 {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      margin-left: 18px;
+      font-size: medium;
+    }
+    
+    h5 a {
+      text-decoration: none;
+      color: rgb(191, 80, 250); /* or any other color of your choice */
+    }
+
+    h5 a:hover{
+      color: rgb(217, 162, 244);
+    }
+
+    
+  
+  /* For responsive */
+  @media (max-width: 768px) {
+    .body {
+      flex-direction: column;
+    }
+  
+    .left-container,
+    .right-container {
+      flex: none; 
+      width: 100%; 
+    }
+  
+    .top-div,
+    .bottom-div {
+      height: auto;
+    }
+
+    label {
+        width: 100%;
+    }
+    
+    input {
+        width: 100%;
+    }
+  }
+  

@@ -1,8 +1,10 @@
 import React, { useState } from 'react';
-import { Navigate, useNavigate } from 'react-router-dom';
+import { Navigate, useNavigate, Link } from 'react-router-dom';
 import axios from 'axios';
+import './css/Login.css';
 
-const Login = () => {
+
+const Login = ({ setShowAuthAlert, setErrorCode }) => {
   const [formData, setFormData] = useState({
     email: '',
     password: '',
@@ -30,36 +32,59 @@ const Login = () => {
         navigate('/home');
 
     } catch (error) {
-      console.error('Error during login:', error);
+      if (error.response && error.response.status === 403) {
+        setErrorCode(403);
+        setShowAuthAlert(true);
+      } else {
+        console.error('Error during login:', error);
+      }
     }
   };
 
   return (
-    <div>
-      <h2>Login</h2>
-      <form onSubmit={handleSubmit}>
-        <label>
-          Email:
-          <input
-            type="email"
-            name="email"
-            value={formData.email}
-            onChange={handleChange}
-          />
-        </label>
-        <br />
-        <label>
-          Password:
-          <input
-            type="password"
-            name="password"
-            value={formData.password}
-            onChange={handleChange}
-          />
-        </label>
-        <br />
-        <button type="submit">Login</button>
-      </form>
+    <div className="body">
+      <div className="left-container">
+        <div className="top-div">
+          <h1 className='mainText'>WORKFLOW</h1>
+          <h1 className='mainText'>MANAGEMENT</h1>
+          <h1 className='mainText'>TOOL</h1>
+          <h2 className='supportText'>Track your workflow <br/>efficiently.</h2>
+        </div>
+        <div className="bottom-div">
+          <div className='circle1'></div>
+          <div className='circle2'></div>
+          <div className='circle3'></div>
+        </div>
+      </div>
+      <div className="right-container">
+        <div className="login-form">
+        <h2>Login</h2>
+          <form onSubmit={handleSubmit}>
+            <label>
+              Email:
+              <input
+                type="email"
+                name="email"
+                value={formData.email}
+                onChange={handleChange}
+              />
+            </label>
+            <label>
+              Password:
+              <input
+                type="password"
+                name="password"
+                value={formData.password}
+                onChange={handleChange}
+              />
+            </label>
+            <br />
+            <br/>
+            <button type="submit">LOGIN</button>
+            <h5>Don't Have Account? <a href="/register">Sign Up</a></h5>
+          </form>
+        </div>
+      </div>
     </div>
   );
 };
