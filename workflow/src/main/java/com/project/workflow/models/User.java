@@ -29,7 +29,7 @@ public class User implements UserDetails {
     @Column(name = "lastName")
     private String lastName;
 
-    @Column(name = "email")
+    @Column(name = "email", unique = true)
     private String email;
 
     @Column(name = "password")
@@ -39,7 +39,7 @@ public class User implements UserDetails {
     private String userName;
 
     @Column(name = "userRatings")
-    private int userRatings;
+    private float userRatings;
 
 
     public Long getUserId() {
@@ -120,11 +120,11 @@ public class User implements UserDetails {
         this.password = password;
     }
 
-    public int getUserRatings() {
+    public float getUserRatings() {
         return userRatings;
     }
 
-    public void setUserRatings(int userRatings) {
+    public void setUserRatings(float userRatings) {
         this.userRatings = userRatings;
     }
 }

@@ -147,29 +147,43 @@
 
     
   
-  /* For responsive */
-  @media (max-width: 768px) {
-    .body {
-      flex-direction: column;
-    }
-  
-    .left-container,
-    .right-container {
-      flex: none; 
-      width: 100%; 
-    }
-  
-    .top-div,
-    .bottom-div {
-      height: auto;
-    }
 
-    label {
+    @media (max-width: 768px) {
+      .body {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        text-align: center;
+        min-height: 100vh; 
+        padding: 20px; 
+      }
+    
+      .left-container, .right-container {
         width: 100%;
+      }
+    
+      .left-container {
+        display: none; 
+      }
+    
+      .right-container {
+        display: flex; 
+        justify-content: center; 
+        align-items: center;
+      }
+    
+      .login-form {
+        width: 100%; 
+        max-width: 400px; 
+        margin: 0; 
+        padding: 30px;
+        box-sizing: border-box;
+      }
+    
+      .top-div, .bottom-div, .circle1, .circle2, .circle3 {
+        display: none; 
+      }
     }
     
-    input {
-        width: 100%;
-    }
-  }
-  
+    

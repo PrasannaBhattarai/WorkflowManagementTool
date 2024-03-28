@@ -5,6 +5,7 @@ import Register from './pages/Register';
 import Home from './pages/Home';
 import AuthChecker from './pages/AuthCheck';
 import AuthAlert from './pages/alert/AuthAlert';
+import Hello from './hello'; 
 
 
 const App = () => {
@@ -35,6 +36,7 @@ const App = () => {
           <Route path="/login" element={<Login setShowAuthAlert={setShowAuthAlert} setErrorCode={setErrorCode} />} />
           <Route path="/register" element={<Register />} />
           <Route path="/auth-check" element={<AuthChecker />} />
+          <Route path="/hello" element={isAuthenticated ? <Hello /> : <Navigate to="/login" />} />
         </Routes>
       </div>
     </Router>
