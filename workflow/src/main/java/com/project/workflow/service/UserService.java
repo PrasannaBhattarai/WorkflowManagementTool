@@ -129,4 +129,14 @@ public class UserService {
             return null;
         }
     }
+
+    public UserResponse getUserByUserEmail(String email) {
+        User user=userRepository.findByEmail(email).orElse(null);
+        UserResponse userResponse = new UserResponse();
+        userResponse.setEmail(user.getEmail());
+        userResponse.setUserName(user.getUserName());
+        userResponse.setFirstName(user.getFirstName());
+        userResponse.setLastName(user.getLastName());
+        return userResponse;
+    }
 }

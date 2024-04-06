@@ -79,6 +79,26 @@ public class ProjectUserService {
                 .collect(Collectors.toList());
     }
 
+    public ProjectUsersDTO getUserByProjectId(Long projectId, String email) {
+        Optional<User> userOptional = userRepository.findByEmail(email);
+
+        if (userOptional.isPresent()){
+        Optional<ProjectUser> projectUser = projectUserRepository.findRoleByProjectId(projectId,userOptional.get().getUserId());
+
+        if (projectUser.isPresent() && userOptional.isPresent()){
+            ProjectUsersDTO projectUsersDTO = new ProjectUsersDTO();
+            projectUsersDTO.setProjectRole(projectUser.get().getProjectRole());
+            projectUsersDTO.setUserType(projectUser.get().getUserType());
+            projectUsersDTO.setProjectId(projectUser.get().getProject().getProjectId());
+            return projectUsersDTO;
+        } else{
+        return null;
+        }
+        } else {
+            return null;
+        }
+    }
+
     public List<PerformanceDTO> getPerformanceByProjectId(Long projectId) {
         return projectPerformanceRepository.findTopPerformers(projectId).stream()
                 .map(result -> new PerformanceDTO((String) result[0], (String) result[1], (Float) result[2]))

@@ -1,0 +1,16 @@
+.todo{
+    display: flex;
+}
+
+.list{
+    width: 70%;
+    height: 100%;
+    background-color: rgb(212, 212, 215);
+}
+
+.performers{
+    width: 30%;
+    height: 100%;
+    background-color: rgb(255, 255, 255);
+}
+

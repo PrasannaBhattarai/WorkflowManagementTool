@@ -1,20 +1,25 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 const AuthChecker = () => {
-  const history = useNavigate();
+  const navigate = useNavigate();
 
-  useEffect(() => {
-    const token = localStorage.getItem('token');
+  const [loading, setLoading] = useState(true);
 
-    if (token) {
-      // Token is present, navigate to the home page
-      history.push('/home');
-    } else {
-      // Token is not present, handle accordingly (e.g., redirect to login)
-      history.push('/login');
-    }
-  }, [history]);
+useEffect(() => {
+  const token = localStorage.getItem('token');
+
+  if (token) {
+    navigate('/home');
+  } else {
+    // Token is not present then redirecting to login
+    navigate('/login');
+  }
+
+  // After navigation setting loading to false
+  setLoading(false);
+}, [navigate]);
+
 
   return <div>Checking Authentication...</div>;
 };

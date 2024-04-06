@@ -38,7 +38,7 @@ public class SecurityConfig {
                 .csrf()
                 .disable()
                 .authorizeHttpRequests()
-                .requestMatchers("/hello/**").permitAll()
+                .requestMatchers("/hello/**","/ws/**","/chat.sendMessage/**","/chat.addUser/**","/topic/**","/app/**").permitAll()
                 .requestMatchers("/admin/**").denyAll()
                 .anyRequest()
                 .authenticated()

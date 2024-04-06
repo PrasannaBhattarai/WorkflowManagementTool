@@ -1,19 +1,15 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import axios from 'axios';
+import './css/EditUser.css';
 import './css/Home.css';
+import ChatApp from './Chat'; 
 
-const Home = () => {
+const EditUser = () => {
   const location = useLocation();
   const [projects, setProjects] = useState([]);
   const [showProjects, setShowProjects] = useState(false);
   const [user, setUser] = useState({ name: '' });
-  const [projectType, setProjectType] = useState('group');
-  const [formData, setFormData] = useState({
-    projectName: '',
-    projectDescription: '',
-    projectType: 'group',
-  });
 
   useEffect(() => {
     const fetchProjects = async () => {
@@ -60,53 +56,15 @@ const Home = () => {
     fetchUser();
   }, []);
 
-  const handleProjectClick = (projectId) => {
+  const handleProjectClick = () => {
     setShowProjects(!showProjects); // Toggle showProjects
   };
   
-  
-  const handleProjectTypeChange = (event) => {
-    setFormData({
-      ...formData,
-      projectType: event.target.value,
-    }); 
-  };
-  
-  
-  const handleInputChange = (event) => {
-    setFormData({
-      ...formData,
-      [event.target.name]: event.target.value,
-    });
-  };
 
-  const handleSubmit = async (event) => {
+  
+
+  const handleSubmit = (event) => {
     event.preventDefault();
-    try {
-      const token = localStorage.getItem('token');
-      if (!token) {
-        console.log('No token found, unable to create project.');
-        return;
-      }
-      const response = await axios.post(
-        'http://localhost:8081/api/project/create',
-        formData,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-            'Content-Type': 'application/json',
-          },
-        }
-      );
-      console.log('Project created:', response.data);
-      setFormData({
-        projectName: '',
-        projectDescription: '',
-        projectType: 'group',
-      });
-    } catch (error) {
-      console.error('Error creating project:', error);
-    }
   };
   
 
@@ -117,7 +75,7 @@ const Home = () => {
           <span>WORKFLOW MANAGEMENT TOOL</span>
         </div>
         <ul>
-        <li className={location.pathname === '/home' ? 'active' : ''}>
+        <li>
          <Link to="/home">
             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-plus-circle" viewBox="0 0 16 16">
               <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16"/>
@@ -127,13 +85,13 @@ const Home = () => {
           </Link>
         </li>
 
-          <li><Link to="/edit-user-details">
+          <li className={location.pathname === '/edit-user-details' ? 'active' : ''}><Link to="/edit-user-details">
           <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-wrench-adjustable" viewBox="0 0 16 16">
             <path d="M16 4.5a4.5 4.5 0 0 1-1.703 3.526L13 5l2.959-1.11q.04.3.041.61"/>
             <path d="M11.5 9c.653 0 1.273-.139 1.833-.39L12 5.5 11 3l3.826-1.53A4.5 4.5 0 0 0 7.29 6.092l-6.116 5.096a2.583 2.583 0 1 0 3.638 3.638L9.908 8.71A4.5 4.5 0 0 0 11.5 9m-1.292-4.361-.596.893.809-.27a.25.25 0 0 1 .287.377l-.596.893.809-.27.158.475-1.5.5a.25.25 0 0 1-.287-.376l.596-.893-.809.27a.25.25 0 0 1-.287-.377l.596-.893-.809.27-.158-.475 1.5-.5a.25.25 0 0 1 .287.376M3 14a1 1 0 1 1 0-2 1 1 0 0 1 0 2"/>
           </svg>
             Edit User Details</Link></li>
-          <li>
+            <li>
             <span onClick={handleProjectClick}>
             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-folder" viewBox="0 0 16 16">
               <path d="M.54 3.87.5 3a2 2 0 0 1 2-2h3.672a2 2 0 0 1 1.414.586l.828.828A2 2 0 0 0 9.828 3h3.982a2 2 0 0 1 1.992 2.181l-.637 7A2 2 0 0 1 13.174 14H2.826a2 2 0 0 1-1.991-1.819l-.637-7a2 2 0 0 1 .342-1.31zM2.19 4a1 1 0 0 0-.996 1.09l.637 7a1 1 0 0 0 .995.91h10.348a1 1 0 0 0 .995-.91l.637-7A1 1 0 0 0 13.81 4zm4.69-1.707A1 1 0 0 0 6.172 2H2.5a1 1 0 0 0-1 .981l.006.139q.323-.119.684-.12h5.396z"/>
@@ -177,58 +135,7 @@ const Home = () => {
           <div className='noti'><span className="notification-badge">3</span></div>
         </div>
         <div className='page'>
-          <form onSubmit={handleSubmit} id="projectForm">
-            <div className="form-group">
-              <label htmlFor="projectName">Project Name:</label>
-              <input
-                type="text"
-                id="projectName"
-                name="projectName"
-                value={formData.projectName} 
-                onChange={handleInputChange} 
-              />
-            </div>
-            <div className="form-group">
-              <label htmlFor="projectDescription">Project Description:</label>
-              <textarea
-                id="projectDescription"
-                name="projectDescription"
-                rows="4"
-                cols="50"
-                value={formData.projectDescription} 
-                onChange={handleInputChange} 
-              ></textarea>
-            </div>
-            <div className="form-group">
-              <label htmlFor="projectType">Select Project Type:</label>
-              <select 
-                id="projectType" 
-                name="projectType" 
-                value={formData.projectType} 
-                onChange={handleProjectTypeChange}
-              >
-                <option value="group">Group</option>
-                <option value="solo">Solo</option>
-              </select>
-            </div>
-            {formData.projectType === 'group' && (
-              <div>
-                <div className="form-group">
-                  <label className='labelCheck'>Select Project Settings:  </label>
-                  <br/><br/>
-                  <div className="checkbox-group">
-                    <label htmlFor="guestAnnouncements">Allow Guest Announcements?</label>
-                    <input type="checkbox" id="guestAnnouncements" name="guestAnnouncements" />
-                  </div>
-                  <div className="checkbox-group">
-                    <label htmlFor="selfTaskAssignment">Allow Self-Task assignment?</label>
-                    <input type="checkbox" id="selfTaskAssignment" name="selfTaskAssignment" />
-                  </div>
-                </div>
-              </div>
-            )}
-            <button type="submit">Submit</button>
-        </form>
+        <ChatApp />
         </div>
       </div>
       <br/><br/>
@@ -238,4 +145,4 @@ const Home = () => {
   );
 };
 
-export default Home;
+export default EditUser;

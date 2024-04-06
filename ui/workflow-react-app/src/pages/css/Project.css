@@ -1,0 +1,248 @@
+/* .content {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .greeting {
+    padding-left: 110px;
+    padding: 30px;
+    height: 5vh; 
+    display: flex;
+    align-items: center; 
+    justify-content: start; 
+    font-size: 20px; 
+    width: 100%;
+    box-sizing: border-box; 
+    background-color: rgb(221, 212, 197);
+    font-weight: bold;
+  }
+  
+  .number svg {
+    padding-left: 0;
+    position: absolute;
+    right: 35px;
+    top: 20px;
+  }
+  
+  .person svg{
+    margin-top: 5px;
+    margin-right: 15px;
+  }
+  
+  .logout {
+    margin-top: auto; 
+    margin-bottom: 20px; 
+    margin-left: 10px; 
+    padding:10px;
+    border-radius: 10vh;
+  }
+
+  .logout:hover{
+    background-color: #011354;
+  }
+  
+  .logout svg{
+    margin-right: 15px;
+    margin-bottom: -5px;
+  }
+  
+  .notification-badge {
+    background-color: red;
+    color: white;
+    font-size: 12px;
+    padding: 2px 6px;
+    border-radius: 50%;
+    position: relative;
+    left: -10px; 
+    top: -10px;
+    font-weight: bold;
+  }
+  
+  .noti{
+    padding-left: 0;
+    position: absolute;
+    right: 9px;
+  }
+  
+  .container {
+    display: flex;
+    min-height: 100vh;
+  }
+  
+  .nav-panel {
+    flex: 0 0 270px;
+    background-color: #010e3e;
+    padding: 20px;
+    color: #fff;
+    display: flex;
+    flex-direction: column;
+    font-size: 17px;
+  }
+  
+  .nav-panel .logo {
+    margin-bottom: 30px;
+    padding-bottom: 20px;
+    font-size: 18px;
+    font-family:Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+  }
+  
+  .nav-panel ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+  
+  .nav-panel li {
+    cursor: pointer;
+    margin-bottom: 10px;
+    margin-left: 10px;
+    padding: 10px;
+    border-radius: 5vh;
+  }
+  
+  .nav-panel li svg {
+    margin-right: 15px;
+    margin-bottom: -5px;
+  }
+  
+  .nav-panel ul li.active {
+    background-color: #031762;
+  }
+  
+  .nav-panel ul li:hover {
+    background-color: #011354;
+  }
+  
+  .nav-panel li:last-child {
+    margin-right: 0; 
+  }
+  
+  .nav-panel .sub-menu {
+    padding-left: 10px;
+    margin-left: 22px;
+    margin-top: 15px;
+    border-radius: 3vh;
+  
+  }
+  
+  .nav-panel li:hover .sub-menu {
+    background-color: #2f4492;
+    border-radius: 3vh;
+  }
+  
+  .nav-panel li:hover .sub-menu li:active{
+    background-color: #011354;
+  }
+  
+  .nav-panel a {
+    color: white;
+    text-decoration: none;
+  }
+  
+   */
+  
+  
+  /* .nav-panel a:active {
+    color: red;
+    text-decoration: none;
+  } */
+  
+  
+  
+  .projectage {
+    margin: 0px;
+    padding: 0px;
+    border: 0px solid #ccc;
+  }
+  
+  .top-panel {
+    background-color: #800080; 
+    padding: 10px;
+    display: flex;
+    justify-content: space-between;
+  }
+  
+  .top-link {
+    display: flex;
+    align-items: center; 
+    color: black;
+    font-weight: bold;
+    text-decoration: none;
+    margin-bottom: 1px;
+    padding: 10px;
+  }
+  
+  .top-link svg {
+    margin-right: 5px; 
+  }
+  
+  
+  .top-link:hover {
+    background-color: #8911a1; 
+    border-radius: 10vh;
+  }
+
+  .top-link.active {
+    background-color: #952cab; 
+    border-radius: 10vh;
+  }
+
+  
+  
+  @media (max-width: 600px) {
+    .container {
+      flex-direction: column; 
+    }
+  
+    .nav-panel {
+      flex: 0 0 auto;
+      width: 100%; 
+      align-items: center;
+      padding: 10px;
+    }
+  
+    .nav-panel .logo, .nav-panel ul, .nav-panel li, .nav-panel a {
+      text-align: center;
+    }
+  
+    .nav-panel li, .nav-panel .logout {
+      margin-left: 0;
+    }
+  
+    .nav-panel .logo {
+      margin-bottom: 20px;
+      padding-bottom: 10px; 
+    }
+  
+    .greeting {
+      padding-left: 20px;
+      justify-content: center; 
+      font-size: 18px; 
+      height: auto; 
+      min-height: 50px; 
+      padding: 15px; 
+      position: relative; 
+    }
+  
+    .person, .number {
+      position: static;
+      margin-right: 10px;
+    }
+  
+    .person svg, .number svg {
+      width: 36px;
+      height: 36px; 
+      display: inline-block; 
+    }
+  
+    .noti {
+      position: static;
+    }
+  
+    .notification-badge {
+      left: unset; 
+      top: unset;
+    }
+  }
+  

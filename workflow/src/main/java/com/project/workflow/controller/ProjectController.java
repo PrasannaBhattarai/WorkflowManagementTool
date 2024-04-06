@@ -42,7 +42,7 @@ public class ProjectController {
 
     private String getEmailFromSecurityContext() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        return authentication != null ? authentication.getName() : ""; // Get email from authentication
+        return authentication != null ? authentication.getName() : "";
     }
 
     public ProjectController(ProjectUserService projectUserService, ProjectRepository projectRepository, ProjectService projectService, ProjectFactory projectFactory, UserRepository userRepository, UserService userService) {
@@ -116,6 +116,13 @@ public class ProjectController {
     public ResponseEntity<List<ProjectUsersDTO>> getProjectsByProjectUserEmail() {
         String userEmail = getEmailFromSecurityContext();
         List<ProjectUsersDTO> projectUsers = projectUserService.getProjectUsersByEmail(userEmail);
+        return new ResponseEntity<>(projectUsers, HttpStatus.OK);
+    }
+
+    @GetMapping("/projectUser/{projectId}")
+    public ResponseEntity<ProjectUsersDTO> getRoleByProjectUserEmail(@PathVariable Long projectId) {
+        String userEmail = getEmailFromSecurityContext();
+        ProjectUsersDTO projectUsers = projectUserService.getUserByProjectId(projectId, userEmail);
         return new ResponseEntity<>(projectUsers, HttpStatus.OK);
     }
 
