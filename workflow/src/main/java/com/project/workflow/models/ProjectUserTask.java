@@ -34,7 +34,7 @@ public class ProjectUserTask {
     private Task task;
 
     @Column(name = "taskRating")
-    private int taskRating;
+    private double taskRating;
 
     public User getAssignerUser() {
         return assignerUser;
@@ -68,11 +68,11 @@ public class ProjectUserTask {
         this.task = task;
     }
 
-    public int getTaskRating() {
+    public double getTaskRating() {
         return taskRating;
     }
 
-    public void setTaskRating(int taskRating) {
+    public void setTaskRating(double taskRating) {
         this.taskRating = taskRating;
     }
 }

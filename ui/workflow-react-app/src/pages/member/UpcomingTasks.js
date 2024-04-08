@@ -12,7 +12,7 @@ const UpcomingTasks = () => {
   const [formData, setFormData] = useState({
     taskDescription: '',
     taskDeadline: '',
-    taskPriority: 'Medium' // Default priority
+    taskPriority: 'Medium' // default priority
   });
 
   useEffect(() => {
@@ -21,7 +21,6 @@ const UpcomingTasks = () => {
         const projectId = new URLSearchParams(window.location.search).get("id");
         const token = localStorage.getItem("token");
 
-        // Fetch active tasks
         const activeResponse = await fetch(`http://localhost:8081/api/tasks/active?projectId=${projectId}`, {
           headers: {
             Authorization: `Bearer ${token}`
@@ -30,7 +29,6 @@ const UpcomingTasks = () => {
         const activeData = await activeResponse.json();
         setActiveTasks(activeData);
 
-        // Fetch non-active tasks
         const nonActiveResponse = await fetch(`http://localhost:8081/api/tasks/non-active?projectId=${projectId}`, {
           headers: {
             Authorization: `Bearer ${token}`
@@ -39,7 +37,6 @@ const UpcomingTasks = () => {
         const nonActiveData = await nonActiveResponse.json();
         setNonActiveTasks(nonActiveData);
 
-        // Fetch project role
         const projectRole = await fetchProjectUser(projectId);
         setProjectRole(projectRole);
       } catch (error) {

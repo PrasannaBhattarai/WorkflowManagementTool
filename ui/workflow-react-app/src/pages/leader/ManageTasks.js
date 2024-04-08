@@ -3,6 +3,7 @@ import { Link, useLocation } from 'react-router-dom';
 import axios from 'axios';
 import './../css/ManageTasks.css';
 import UpcomingTasks from '../member/UpcomingTasks';
+import AssignTasks from '../leader/AssignTasks';
 
 const ManageTasks = () => {
     const location = useLocation();
@@ -75,13 +76,14 @@ const ManageTasks = () => {
                 )}
                 {(activeComponent === 'AssignTasks' && project && project.projectType !== 'solo') && (
                     <div className="taskContent">
-                        <h2>{project.projectName}</h2>
-                        <p>{project.projectDescription}</p>
-                        <p>Project Type: {project.projectType}</p>
+                        <AssignTasks/>
                     </div>
                 )}
                 {activeComponent === 'RateCompletedAssignedTasks' && (
                     <div className="taskContent">
+                        <h2>{project.projectName}</h2>
+                        <p>{project.projectDescription}</p>
+                        <p>Project Type: {project.projectType}</p>
                     </div>
                 )}
             </div>

@@ -1,5 +1,6 @@
 package com.project.workflow.service;
 import com.project.workflow.models.*;
+import com.project.workflow.models.dto.RateTaskDTO;
 import com.project.workflow.models.dto.TasksDTO;
 import com.project.workflow.models.dto.UserDTO;
 import com.project.workflow.models.dto.UserEmails;
@@ -7,6 +8,7 @@ import com.project.workflow.models.response.TaskForUsers;
 import com.project.workflow.models.response.UserResponse;
 import com.project.workflow.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Service;
 
 import java.sql.Timestamp;
@@ -232,6 +234,14 @@ public class TaskService {
         }
         else {
             return null;
+        }
+    }
+
+    public void rateTask(RateTaskDTO rateTaskDTO, Long projectId){
+        User assignedUser = userRepository.findUserByEmail(rateTaskDTO.getEmail());
+        if (rateTaskDTO.getRating()>=1 && rateTaskDTO.getRating()<=5){
+            projectUserTaskRepository.findByProjectProjectId(projectId,rateTaskDTO.getTaskId(),assignedUser.getUserId(), rateTaskDTO.getRating());
+            userRepository.updateRatings((assignedUser.getUserRatings()+rateTaskDTO.getRating())/2, assignedUser.getUserId());
         }
     }
 }

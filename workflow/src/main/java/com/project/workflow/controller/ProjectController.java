@@ -62,6 +62,11 @@ public class ProjectController {
         return "Hi " + userEmail;
     }
 
+    @PostMapping("/edit/{projectId}")
+    public void editProject(@PathVariable Long projectId, @RequestBody ProjectSettingsDTO projectSettingsDTO){
+        projectService.changeSettings(projectId, projectSettingsDTO);
+    }
+
 
     // executed together with /createProjectUser
     @PostMapping("/create")

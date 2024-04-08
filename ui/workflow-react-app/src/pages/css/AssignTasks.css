@@ -1,0 +1,91 @@
+.assign-tasks {
+    margin-top: -20px;
+    border: solid 1px black;
+    border-radius: 5vh;
+    max-height: 450px;
+    overflow-y: auto;
+    padding-top: 10px;
+}
+
+.assign-tasks form button {
+    max-width: 17%;
+    border-radius: 1vh;
+}
+
+.assignable-users {
+    text-align: center;
+    width: 100%;
+}
+
+.assignable-users-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 3px;
+    padding-top: 10px;
+    background-color: rgb(188, 187, 187);
+    max-height: 150px;
+    overflow-y: auto;
+}
+
+.user-card {
+    width: 100%;
+    margin-bottom: 20px;
+    margin-left: 30px;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    background-color: rgb(238, 238, 241);
+    display: flex;
+    align-items: center;
+}
+
+.user-card svg {
+    margin-right: 10px;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+}
+
+.user-card .user-details {
+    flex-grow: 1;
+}
+
+.user-card .user-name {
+    margin-top: 0;
+    margin-bottom: 0;
+}
+
+.user-card button {
+    margin-top: 0.5%;
+    margin-left: auto;
+    background-color: #4B0082;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    padding: 5px 10px;
+    cursor: pointer;
+}
+
+.user-card button:hover {
+    background-color: #a7a5a8;
+}
+
+.user-card button:disabled {
+    background-color: #ccc;
+    cursor: not-allowed;
+}
+
+.selected-users span{
+    margin-top: 15px;
+    margin-left: 10px;
+    background-color: rgb(154, 150, 150);
+    height: 30px;
+    padding-left: 5px;
+    padding-right: 5px;
+    border-radius: 2vh;
+}
+
+.user-card .ratings{
+    color: rgb(100, 100, 7);
+    margin-left: auto;
+}

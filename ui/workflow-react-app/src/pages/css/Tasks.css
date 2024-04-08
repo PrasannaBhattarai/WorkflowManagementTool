@@ -1,6 +1,7 @@
 .tasks {
     display: flex;
-    height: 90%;
+    max-height: 460px;
+    overflow-y: auto;
   }
   
   .tasklist {
@@ -9,7 +10,7 @@
     background-color: rgb(212, 212, 215);
     padding-left: 10px;
     padding-right: 10px;
-    overflow-y: hidden;
+    overflow-y: auto;
   }
   
   .scrollable-table {

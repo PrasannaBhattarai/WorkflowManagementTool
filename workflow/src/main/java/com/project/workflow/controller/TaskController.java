@@ -2,6 +2,7 @@ package com.project.workflow.controller;
 
 import com.project.workflow.models.Task;
 import com.project.workflow.models.User;
+import com.project.workflow.models.dto.RateTaskDTO;
 import com.project.workflow.models.dto.TasksDTO;
 import com.project.workflow.models.dto.UserDTO;
 import com.project.workflow.models.dto.UserEmails;
@@ -98,6 +99,11 @@ public class TaskController {
     public List<TasksDTO> getRatedTasks(@PathVariable Long projectId){
         String userEmail = getEmailFromSecurityContext();
         return taskService.getRatedTasks(userEmail,projectId);
+    }
+
+    @PostMapping("rateTask/{projectId}")
+    public void setRatings(@RequestBody RateTaskDTO rateTaskDTO, @PathVariable Long projectId){
+        taskService.rateTask(rateTaskDTO,projectId);
     }
 
 

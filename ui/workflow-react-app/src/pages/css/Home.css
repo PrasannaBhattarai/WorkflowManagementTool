@@ -32,15 +32,19 @@
 }
 
 .logout {
-  margin-top: auto; /* Push logout button to the bottom */
-  margin-bottom: 20px; 
-  margin-left: 10px; 
-  padding:10px;
+  position: fixed; 
+  bottom: 20px; 
+  left: 10px;
+  padding: 10px;
   border-radius: 10vh;
+  margin-left: 20px;
 }
+
 
 .logout:hover{
   background-color: #011354;
+  padding-right: 90px;
+  margin-right: -10px; 
 }
 
 .logout svg{

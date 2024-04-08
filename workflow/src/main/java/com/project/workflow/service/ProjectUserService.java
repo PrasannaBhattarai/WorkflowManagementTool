@@ -42,7 +42,7 @@ public class ProjectUserService {
         Project project = projectRepository.findById(projectUserDTO.getProjectId()).orElseThrow(
                 () -> new RuntimeException("Project not found"));
 
-        ProjectUser projectUser = new ProjectUser(user, project, projectUserDTO.getUserType(), projectUserDTO.getProjectRole());
+        ProjectUser projectUser = new ProjectUser(user, project, projectUserDTO.getUserType(), "Leader");
         return projectUserRepository.save(projectUser);
     }
 
