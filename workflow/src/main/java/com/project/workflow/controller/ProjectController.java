@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.*;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @CrossOrigin(origins = "http://localhost:3000")
@@ -136,6 +137,17 @@ public class ProjectController {
     public ResponseEntity<List<PerformanceDTO>> getTopPerformers(@PathVariable Long projectId) {
         List<PerformanceDTO> performance = projectUserService.getPerformanceByProjectId(projectId);
         return new ResponseEntity<>(performance, HttpStatus.OK);
+    }
+
+    @GetMapping("/projectType/{projectId}")
+    public ResponseEntity<Optional<Project>> getProjectType(@PathVariable Long projectId) {
+        Optional<Project> project = projectRepository.findById(projectId);
+        if (project.isPresent()){
+        return new ResponseEntity<>(project, HttpStatus.OK);
+        }
+        else{
+            return null;
+        }
     }
 
     @GetMapping("/search/{text}")

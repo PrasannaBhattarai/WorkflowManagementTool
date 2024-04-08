@@ -1,16 +1,155 @@
-.todo{
+.todo {
     display: flex;
-}
-
-.list{
+    height: 90%;
+  }
+  
+  .list {
     width: 70%;
     height: 100%;
     background-color: rgb(212, 212, 215);
-}
-
-.performers{
+    padding-left: 10px;
+    padding-right: 10px;
+  }
+  
+  .performers {
     width: 30%;
     height: 100%;
     background-color: rgb(255, 255, 255);
-}
+  }
+  
+  .list label {
+    display: block;
+    margin-bottom: 10px;
+    margin-top: 10px;
+  }
+  
+  .list input[type="checkbox"] {
+    display: none;
+  }
+  
+  .list input[type="checkbox"] + span {
+    position: relative;
+    padding-left: 30px;
+    cursor: pointer;
+    
+  }
+  
+  .list input[type="checkbox"] + span:before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: -5px;
+    width: 25px;
+    height: 25px;
+    border: 1px solid #aaa;
+    background-color: #fff;
+    border-radius: 5vh;
+  }
+  
+  .list input[type="checkbox"]:checked + span:before {
+    content: "\2713";
+    font-size: 16px;
+    line-height: 25px;
+    text-align: center;
+    border: none;
+    background-color: #66bb6a;
+    color: #fff;
+  }
+  
+  .list input[type="checkbox"]:disabled + span {
+    text-decoration: line-through;
+  }
+  
+  .pending {
+    cursor: pointer;
+   
+  }
+  
+  .pending:hover {
+    text-decoration: underline;
+  }
 
+  .completed {
+    text-decoration: line-through;
+    color: #888;
+  }
+  
+  .design{
+    background-color: rgb(255, 255, 255);
+    border-radius: 3vh;
+    padding-left: 20px;
+    padding-top: 1px;
+    margin-top: 20px;
+  }
+
+  .add-item-button {
+    position: fixed;
+    bottom: 20px;
+    right: 27%;
+  }
+  
+  .add-item-button button {
+    display: flex;
+    align-items: center;
+    background-color: #8d8d8d;
+    color: rgb(0, 0, 0);
+    padding: 12px 17px;
+    border: none;
+    border-radius: 2vh;
+    cursor: pointer;
+    outline: none;
+    font-weight: bold;
+  }
+  
+  .add-item-button button svg {
+    margin-right: 15px;
+  }
+  
+  .add-item-button button:hover {
+    background-color: #5b5d5f;
+  }
+  
+  .todoForm {
+    width: 70%; 
+    height: 100%; 
+    background-color: rgb(212, 212, 215); 
+    padding-left: 10px;
+    padding-right: 10px;
+  }
+
+  .todoForm .custom-button {
+    background-color: rgb(151, 54, 168);
+    width: fit-content; 
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    outline: none;
+    font-weight: bold;
+    text-align: center; /* Center the text */
+    padding: 5px 50px;
+  }
+
+  .todoForm .cancel-button {
+    background-color: rgb(151, 54, 168);
+    width: fit-content; 
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    outline: none;
+    font-weight: bold;
+    text-align: center; /* Center the text */
+    padding: 5px 50px;
+  }
+  
+  
+  .todoForm .custom-button:hover {
+    background-color: rgb(98, 33, 108);
+    color: white;
+  }
+
+  .todoForm .cancel-button:hover {
+    background-color: rgb(98, 33, 108);
+    color: white;
+  }
+  
+  

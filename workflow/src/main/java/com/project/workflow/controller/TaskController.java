@@ -34,7 +34,12 @@ public class TaskController {
     @PostMapping("/create")
     public ResponseEntity<Task> createTask(@RequestBody Task task, @RequestParam String assignedUser, @RequestParam Long projectId) {
         String userEmail = getEmailFromSecurityContext();
-        Task createdTask = taskService.createTask(task, userEmail, assignedUser, projectId);
+        Task createdTask;
+        if (assignedUser.equals("null")){
+            createdTask = taskService.createTask(task, userEmail, userEmail, projectId);
+        }else{
+            createdTask = taskService.createTask(task, userEmail, assignedUser, projectId);
+        }
         if (createdTask != null) {
             return new ResponseEntity<>(createdTask, HttpStatus.CREATED);
         } else {
@@ -50,9 +55,14 @@ public class TaskController {
     }
 
     @GetMapping("/non-active")
-    public ResponseEntity<List<Task>> getDeadlineMissedTasksOrCompletedTasks() {
+    public ResponseEntity<List<Task>> getDeadlineMissedTasksOrCompletedTasks(@RequestParam Long projectId) {
         String userEmail = getEmailFromSecurityContext();
-        List<Task> deadlineMissedOrCompletedTasks = taskService.getDeadlineMissedTasksOrCompletedTasks(userEmail);
+        List<Task> deadlineMissedOrCompletedTasks = taskService.getDeadlineMissedTasksOrCompletedTasks(userEmail,projectId);
         return new ResponseEntity<>(deadlineMissedOrCompletedTasks, HttpStatus.OK);
+    }
+
+    @PutMapping("/disable/{taskId}")
+    public void disableTask(@PathVariable Long taskId) {
+        taskService.disableTask(taskId);
     }
 }

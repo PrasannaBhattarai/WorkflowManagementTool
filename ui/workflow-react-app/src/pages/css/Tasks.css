@@ -1,0 +1,78 @@
+.tasks {
+    display: flex;
+    height: 90%;
+  }
+  
+  .tasklist {
+    width: 70%;
+    height: 100%;
+    background-color: rgb(212, 212, 215);
+    padding-left: 10px;
+    padding-right: 10px;
+    overflow-y: hidden;
+  }
+  
+  .scrollable-table {
+    max-height: 100%;
+    overflow-y: auto; 
+  }
+  
+  .task-table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+  
+  .task-table th,
+  .task-table td {
+    border: 1px solid black;
+    padding: 8px;
+  }
+  
+  .task-table th:nth-child(2) {
+    width: 50%;
+  }
+  
+  .task-table th:nth-child(1) {
+    width: 15%;
+  }
+  
+  .task-table input[type="checkbox"] {
+    width: 40%;
+    height: 30px;
+  }
+  
+  .performers {
+    width: 30%;
+    height: 100%;
+    background-color: rgb(242, 12, 12);
+  }
+
+
+  
+  .add-item-button {
+    position: fixed;
+    bottom: 20px;
+    right: 27%;
+  }
+  
+  .add-item-button button {
+    display: flex;
+    align-items: center;
+    background-color: #8d8d8d;
+    color: rgb(0, 0, 0);
+    padding: 12px 17px;
+    border: none;
+    border-radius: 2vh;
+    cursor: pointer;
+    outline: none;
+    font-weight: bold;
+  }
+  
+  .add-item-button button svg {
+    margin-right: 15px;
+  }
+  
+  .add-item-button button:hover {
+    background-color: #5b5d5f;
+  }
+  

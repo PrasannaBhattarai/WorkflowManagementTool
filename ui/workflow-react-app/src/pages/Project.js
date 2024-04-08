@@ -5,7 +5,7 @@ import './css/Home.css';
 import './css/Project.css';
 import Guest from './Guest.js';
 import Leader from './Leader.js';
-import ToDo from './member/ToDo.js';
+import ToDo from './member/Todo.js';
 import UpcomingTasks from './member/UpcomingTasks';
 import NoticeBoard from './NoticeBoard';
 import Chatroom from './Chat';

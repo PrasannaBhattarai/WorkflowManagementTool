@@ -34,7 +34,12 @@ public class TaskService {
 
     public Task createTask(Task task, String assigner, String assignedUser, Long projectId) {
 
-        Task savedTask = taskRepository.save(task);
+        Task savedTask = new Task();
+        savedTask.setTaskStatus("pending");
+        savedTask.setTaskDeadline(task.getTaskDeadline());
+        savedTask.setTaskDescription(task.getTaskDescription());
+        savedTask.setTaskPriority(task.getTaskPriority());
+        taskRepository.save(savedTask);
 
         User assigned = userRepository.findUserByEmail(assignedUser);
         User assignedBy = userRepository.findUserByEmail(assigner);
@@ -68,14 +73,18 @@ public class TaskService {
         }
     }
 
-    public List<Task> getDeadlineMissedTasksOrCompletedTasks(String userEmail) {
+    public List<Task> getDeadlineMissedTasksOrCompletedTasks(String userEmail, Long projectId) {
         User user = userRepository.findUserByEmail(userEmail);
 
         if (user != null) {
-            return taskRepository.findDeadlineMissedTasksOrCompletedTasks(user.getUserId());
+            return taskRepository.findDeadlineMissedTasksOrCompletedTasks(user.getUserId(),projectId);
         } else {
             return Collections.emptyList();
         }
 
+    }
+
+    public void disableTask(Long taskId){
+        taskRepository.markTaskAsCompleted(taskId);
     }
 }
