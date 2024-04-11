@@ -1,0 +1,61 @@
+.popup-wrapper {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: rgba(0, 0, 0, 0.5); 
+    backdrop-filter: blur(4px);
+   
+}
+
+.popup {
+    background-color: #f9f9f9;
+    padding: 20px;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+    border-radius: 5vh;
+}
+
+.popup h2 {
+    margin-bottom: 10px;
+}
+
+.popup p {
+    margin: 5px 0;
+}
+
+.popup .star {
+    color: gold;
+}
+
+.popup label {
+    display: block;
+    margin-bottom: 5px;
+}
+
+.popup select, .popup input[type="text"] {
+    width: 100%;
+    padding: 8px;
+    margin-bottom: 10px;
+}
+
+.button-group {
+    text-align: right;
+}
+
+.button-group button {
+    margin-left: 10px;
+    margin-top: 0;
+}
+
+.invite-button{
+    width: 20%;
+}
+
+.cancel-button{
+    width: 20%;
+}

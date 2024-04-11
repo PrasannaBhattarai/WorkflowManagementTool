@@ -11,6 +11,7 @@ public class TasksDTO {
     private String assignerUserEmail;
     private String taskStatus;
     private String taskPriority;
+    private double rating;
 
     public Long getTaskId() {
         return taskId;
@@ -74,5 +75,13 @@ public class TasksDTO {
 
     public void setTaskPriority(String taskPriority) {
         this.taskPriority = taskPriority;
+    }
+
+    public double getRating() {
+        return rating;
+    }
+
+    public void setRating(double rating) {
+        this.rating = rating;
     }
 }

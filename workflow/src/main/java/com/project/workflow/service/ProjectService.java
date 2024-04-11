@@ -85,5 +85,32 @@ public class ProjectService {
         }
     }
 
+    public ProjectSettingsDTO getProjectSettings(Long projectId){
+        Optional<ProjectSettings> guestAnnounce = projectSettingsRepository.findGuestAnnounce(projectId);
+        Optional<ProjectSettings> selfAssign = projectSettingsRepository.findSelAssign(projectId);
+        Optional<Project> project = projectRepository.findById(projectId);
+        ProjectSettingsDTO projectSettingsDTO = new ProjectSettingsDTO();
+        if (project.isPresent() && project.get().getProjectType().equals("group")){
+            if(guestAnnounce.isPresent()){
+                projectSettingsDTO.setAllowGuestAnnouncements(true);
+            }else {
+                projectSettingsDTO.setAllowGuestAnnouncements(false);
+            }
+            if(selfAssign.isPresent()){
+                projectSettingsDTO.setAllowSelfAssignment(true);
+            }else {
+                projectSettingsDTO.setAllowSelfAssignment(false);
+            }
+            projectSettingsDTO.setGroupProject(true);
+            return projectSettingsDTO;
+        }
+        else {
+            projectSettingsDTO.setAllowGuestAnnouncements(false);
+            projectSettingsDTO.setAllowSelfAssignment(false);
+            projectSettingsDTO.setGroupProject(false);
+            return projectSettingsDTO;
+        }
+    }
+
 
 }

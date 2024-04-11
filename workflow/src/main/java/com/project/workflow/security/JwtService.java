@@ -73,10 +73,12 @@ public class JwtService {
     }
 
     public String generateTokenForAdmin() {
-        Claims claims = Jwts.claims().setSubject("admin");
+        Claims claims = Jwts.claims().setSubject("admin@gmail.com");
 
         return Jwts.builder()
                 .setClaims(claims)
+                .setIssuedAt(new Date(System.currentTimeMillis()))
+                .setExpiration(new Date(System.currentTimeMillis()+1000*60*24))
                 .signWith(SignatureAlgorithm.HS256, SECRET_KEY)
                 .compact();
     }

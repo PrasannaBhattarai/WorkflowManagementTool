@@ -37,4 +37,5 @@ public class TestController {
     public ResponseEntity<AuthenticationResponse> adminAuthenticate(@RequestBody RegisterBody registerBody) throws Exception {
         return ResponseEntity.ok(userService.adminAuthenticate(registerBody));
     }
+
 }

@@ -12,7 +12,6 @@ useEffect(() => {
   if (token) {
     navigate('/home');
   } else {
-    // Token is not present then redirecting to login
     navigate('/login');
   }
 

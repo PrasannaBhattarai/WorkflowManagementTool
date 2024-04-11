@@ -19,7 +19,7 @@ public interface ProjectUserTaskRepository extends JpaRepository<ProjectUserTask
 
     @Query("SELECT pu FROM ProjectUserTask pu " +
             "WHERE pu.project.projectId = :projectId " +
-            "AND pu.assignerUser.userId NOT IN (:leaderIds)")
+            "AND pu.assignedUser.userId NOT IN (:leaderIds)")
     List<ProjectUserTask> findActiveTasks(@Param("projectId") Long projectId, @Param("leaderIds") List<Long> leaderIds);
 
     @Modifying

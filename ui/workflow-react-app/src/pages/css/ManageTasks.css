@@ -21,6 +21,10 @@
 
 .component-container {
     margin-top: 10px;
+    display: flex;
+    flex-direction: column; 
+    flex: 1;
+    overflow: auto;
 }
 
 .taskContent {

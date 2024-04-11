@@ -1,0 +1,51 @@
+.rating-card {
+    background-color: rgb(199, 195, 195);
+    flex: 1;
+    overflow-y: auto;
+    border-radius: 3vh;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+}
+
+.card-container {
+    margin-bottom: 20px;
+    background-color: white;
+    padding: 20px;
+    border-radius: 3vh;
+    display: flex;
+    flex-direction: column;
+}
+
+.custom-submit {
+    align-self: flex-end;
+    max-width: 15%; 
+    border-radius: 1vh;
+    margin-top: -5%;
+}
+
+.input-field, .custom-submit {
+    width: fit-content;
+    max-width: 15%; 
+}
+
+.input-field {
+    border-radius: 1vh;
+    margin-bottom: 10px;
+}
+
+.blue {
+    color: blue;
+}
+
+.green {
+    color: green;
+}
+
+.red {
+    color: red;
+}
+
+.yellow{
+    color: rgb(137, 119, 0);
+}

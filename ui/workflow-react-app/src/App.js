@@ -8,6 +8,8 @@ import AuthAlert from './pages/alert/AuthAlert';
 import Hello from './hello';
 import EditUser from './pages/EditUser';
 import Project from './pages/Project';
+import ChartComponent from './pages/admin/ChartComponent';
+import UserAnalytics from './pages/admin/ProjectMonthlyGraph';
 
 const App = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -47,6 +49,9 @@ const App = () => {
           {/* Redirect base URL to /login */}
           <Route path="/" element={<Navigate to="/login" />} />
           {/* <Route path="*" element={<Navigate to="/login" />} /> */}
+
+          <Route path="/chart" element={<ChartComponent />} />
+          <Route path="/user" element={<UserAnalytics />} />
         </Routes>
       </div>
     </Router>

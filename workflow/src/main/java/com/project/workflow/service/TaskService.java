@@ -227,6 +227,7 @@ public class TaskService {
                     tasksDTO.setTaskPriority(task.getTask().getTaskPriority());
                     tasksDTO.setTaskDescription(task.getTask().getTaskDescription());
                     tasksDTO.setTaskDeadline(task.getTask().getTaskDeadline());
+                    tasksDTO.setRating(task.getTaskRating());
                     tasksDTO.setDeadlineMissed(false);
                     taskList.add(tasksDTO);
                 }}

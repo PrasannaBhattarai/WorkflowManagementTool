@@ -39,7 +39,6 @@ public class SecurityConfig {
                 .disable()
                 .authorizeHttpRequests()
                 .requestMatchers("/hello/**","/ws/**","/chat.sendMessage/**","/chat.addUser/**","/topic/**","/app/**").permitAll()
-                .requestMatchers("/admin/**").denyAll()
                 .anyRequest()
                 .authenticated()
                 .and()
@@ -68,7 +67,6 @@ public class SecurityConfig {
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
                 .authenticationProvider(adminAuthenticationProvider());
-        System.out.println(adminEmail+" "+adminPassword);
         return httpSecurity.build();
     }
 

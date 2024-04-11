@@ -119,7 +119,7 @@ const ToDo = () => {
           <br/>
           <form onSubmit={handleSubmit}>
           <label>To-Do Description:</label>
-          <input type="text" id="todoDescription" value={description} onChange={(e) => setDescription(e.target.value)}/>
+          <input type="text" id="todoDescription" value={description} onChange={(e) => setDescription(e.target.value)} required/>
           <br/>
           <br/>
           <center>

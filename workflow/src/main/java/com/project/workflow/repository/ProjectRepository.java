@@ -11,6 +11,6 @@ public interface ProjectRepository extends JpaRepository<Project, Long>  {
 
     @Modifying
     @Transactional
-    @Query("UPDATE Project t SET t.projectType = 'solo' WHERE t.projectId = :projectId")
+    @Query("UPDATE Project t SET t.projectType = 'group' WHERE t.projectId = :projectId")
     void changeToGroup(@Param("projectId") Long projectId);
 }

@@ -166,4 +166,9 @@ public class ProjectController {
         }
     }
 
+    @GetMapping("/searchSettings/{projectId}")
+    public ProjectSettingsDTO getSettings(@PathVariable Long projectId){
+        return projectService.getProjectSettings(projectId);
+    }
+
 }

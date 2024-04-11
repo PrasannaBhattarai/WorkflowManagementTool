@@ -1,9 +1,12 @@
 package com.project.workflow.security;
 
 import org.springframework.security.authentication.AuthenticationProvider;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
+
+import java.util.Collections;
 
 public class AdminAuthenticationProvider implements AuthenticationProvider {
     private final String adminEmail;
@@ -21,11 +24,13 @@ public class AdminAuthenticationProvider implements AuthenticationProvider {
 
         // validation of admin credentials compared to application.properties
         if (adminEmail.equals(username) && adminPassword.equals(password)) {
-            return new UsernamePasswordAuthenticationToken(username, password, authentication.getAuthorities());
+            System.out.println("HIIIIII"+authentication.isAuthenticated()+" lol "+ authentication.getAuthorities() );
+            // authentication.getAuthorities()
+            return new UsernamePasswordAuthenticationToken(username, password, Collections.emptyList());
         }
 
         // if credentials are not valid= authentication failure
-        return null;
+        throw new BadCredentialsException("Invalid admin credentials");
     }
 
     @Override

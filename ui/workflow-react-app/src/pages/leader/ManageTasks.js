@@ -4,6 +4,7 @@ import axios from 'axios';
 import './../css/ManageTasks.css';
 import UpcomingTasks from '../member/UpcomingTasks';
 import AssignTasks from '../leader/AssignTasks';
+import RateTasks from '../leader/RateTasks';
 
 const ManageTasks = () => {
     const location = useLocation();
@@ -81,9 +82,7 @@ const ManageTasks = () => {
                 )}
                 {activeComponent === 'RateCompletedAssignedTasks' && (
                     <div className="taskContent">
-                        <h2>{project.projectName}</h2>
-                        <p>{project.projectDescription}</p>
-                        <p>Project Type: {project.projectType}</p>
+                        <RateTasks />
                     </div>
                 )}
             </div>

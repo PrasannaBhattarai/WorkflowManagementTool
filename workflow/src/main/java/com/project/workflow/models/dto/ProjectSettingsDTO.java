@@ -47,4 +47,7 @@ public class ProjectSettingsDTO {
         this.allowSelfAssignment = allowSelfAssignment;
         this.emails = emails;
     }
+    public ProjectSettingsDTO(){
+
+    }
 }

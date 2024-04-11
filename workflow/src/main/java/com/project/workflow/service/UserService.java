@@ -28,6 +28,7 @@ public class UserService {
     private final JwtService jwtService;
     private final AuthenticationManager authenticationManager;
 
+    //injecting in-memory user variables
     @Value("${admin.email}")
     private String adminEmail;
 
@@ -68,9 +69,9 @@ public class UserService {
     public AuthenticationResponse adminAuthenticate(RegisterBody registerBody) {
         try {
 
-            // Validation of credentials and admin properties
+            // validation of credentials and admin properties
             if (adminEmail.equals(registerBody.getEmail()) && adminPassword.equals(registerBody.getPassword())) {
-                // Generate JWT token for the admin user
+                // generating JWT token for the admin user
                 String jwtToken = jwtService.generateTokenForAdmin();
 
                 return AuthenticationResponse.builder()
