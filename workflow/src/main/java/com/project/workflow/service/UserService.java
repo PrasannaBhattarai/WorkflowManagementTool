@@ -1,11 +1,9 @@
 package com.project.workflow.service;
 
-import com.project.workflow.models.AuthenticationRequest;
-import com.project.workflow.models.AuthenticationResponse;
-import com.project.workflow.models.RegisterBody;
-import com.project.workflow.models.User;
+import com.project.workflow.models.*;
 import com.project.workflow.models.dto.UserDTO;
 import com.project.workflow.models.response.UserResponse;
+import com.project.workflow.repository.ProjectUserRepository;
 import com.project.workflow.repository.UserRepository;
 import com.project.workflow.security.JwtService;
 import lombok.RequiredArgsConstructor;
@@ -15,6 +13,8 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -27,6 +27,7 @@ public class UserService {
     private final PasswordEncoder passwordEncoder;
     private final JwtService jwtService;
     private final AuthenticationManager authenticationManager;
+    private final ProjectUserRepository projectUserRepository;
 
     //injecting in-memory user variables
     @Value("${admin.email}")
@@ -120,16 +121,23 @@ public class UserService {
         userRepository.deleteById(userId);
     }
 
-    public List<UserDTO> getSearchUsers(String text) {
-        List<User> users = userRepository.findByEmailContaining(text);
-        if (users != null) {
-            return users.stream()
-                    .map(user -> new UserDTO(user.getEmail(), user.getFirstName(), user.getLastName(), user.getUserName(), user.getUserRatings()))
-                    .collect(Collectors.toList());
-        } else {
-            return null;
+    public List<UserDTO> getSearchUsers(Long projectId, String text) {
+        List<ProjectUser> projectUsers = projectUserRepository.findByProjectProjectId(projectId);
+        List<Long> userIds = projectUsers.stream()
+                .map(projectUser -> projectUser.getUser().getUserId())
+                .collect(Collectors.toList());
+        if (!userIds.isEmpty()) {
+            List<User> users = userRepository.findByEmailContaining(text, "admin@gmail.com", userIds);
+            if (users != null) {
+                return users.stream()
+                        .map(user -> new UserDTO(user.getEmail(), user.getFirstName(), user.getLastName(), user.getUserName(), user.getUserRatings()))
+                        .collect(Collectors.toList());
+            }
         }
+        return Collections.emptyList();
     }
+
+
 
     public UserResponse getUserByUserEmail(String email) {
         User user=userRepository.findByEmail(email).orElse(null);

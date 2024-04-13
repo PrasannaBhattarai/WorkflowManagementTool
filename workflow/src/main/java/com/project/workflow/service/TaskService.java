@@ -5,14 +5,11 @@ import com.project.workflow.models.dto.TasksDTO;
 import com.project.workflow.models.dto.UserDTO;
 import com.project.workflow.models.dto.UserEmails;
 import com.project.workflow.models.response.TaskForUsers;
-import com.project.workflow.models.response.UserResponse;
 import com.project.workflow.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Service;
 
 import java.sql.Timestamp;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -26,14 +23,17 @@ public class TaskService {
     private final UserRepository userRepository;
     private final ProjectRepository projectRepository;
     private final ProjectUserRepository projectUserRepository;
+    private final NotificationService notificationService;
+
 
     @Autowired
-    public TaskService(TaskRepository taskRepository, ProjectUserTaskRepository projectUserTaskRepository, UserRepository userRepository, ProjectRepository projectRepository, ProjectUserRepository projectUserRepository) {
+    public TaskService(TaskRepository taskRepository, ProjectUserTaskRepository projectUserTaskRepository, UserRepository userRepository, ProjectRepository projectRepository, ProjectUserRepository projectUserRepository, NotificationService notificationService) {
         this.taskRepository = taskRepository;
         this.projectUserTaskRepository = projectUserTaskRepository;
         this.userRepository = userRepository;
         this.projectRepository = projectRepository;
         this.projectUserRepository = projectUserRepository;
+        this.notificationService = notificationService;
     }
 
     public Task createTask(Task task, String assigner, String assignedUser, Long projectId) {
@@ -90,6 +90,9 @@ public class TaskService {
                 projectUserTask.setAssignedUser(assigned);
                 projectUserTask.setProject(project.get());
                 projectUserTaskRepository.save(projectUserTask);
+
+                //send notification
+                notificationService.createTaskAssignNotification(assigned,project.get());
             }
         }
     }
@@ -243,6 +246,7 @@ public class TaskService {
         if (rateTaskDTO.getRating()>=1 && rateTaskDTO.getRating()<=5){
             projectUserTaskRepository.findByProjectProjectId(projectId,rateTaskDTO.getTaskId(),assignedUser.getUserId(), rateTaskDTO.getRating());
             userRepository.updateRatings((assignedUser.getUserRatings()+rateTaskDTO.getRating())/2, assignedUser.getUserId());
+            notificationService.createRatedNotification(assignedUser,projectId);
         }
     }
 }

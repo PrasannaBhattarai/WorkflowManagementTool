@@ -8,7 +8,6 @@ import com.project.workflow.repository.ToDoListRepository;
 import com.project.workflow.repository.UserRepository;
 import org.springframework.stereotype.Service;
 
-import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -22,6 +21,7 @@ public class ToDoListService {
     private final UserRepository userRepository;
 
     private final ProjectRepository projectRepository;
+
 
     public ToDoListService(ToDoListRepository toDoListRepository, ProjectToDoListRepository projectToDoListRepository, UserRepository userRepository, ProjectRepository projectRepository) {
         this.toDoListRepository = toDoListRepository;

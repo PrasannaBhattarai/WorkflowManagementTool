@@ -4,10 +4,16 @@ import com.project.workflow.models.Project;
 import com.project.workflow.models.User;
 import com.project.workflow.models.response.UserResponse;
 import com.project.workflow.service.UserService;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
+import java.io.IOException;
+import java.util.Base64;
 import java.util.List;
 
 @RestController
@@ -34,10 +40,43 @@ public class UserController {
     }
 
 
+    @PostMapping("/editUser")
+    public ResponseEntity<UserResponse> editUser(@RequestParam("image") MultipartFile imageFile) {
+        String userEmail = getEmailFromSecurityContext();
+        UserResponse user = userService.getUserByUserEmail(userEmail);
+
+        // encoding the email to set as image name
+        String encodedEmail = encodeString(user.getEmail());
+
+        // storing the image in resources/images directory
+        try {
+            String fileName = encodedEmail + ".jpg";
+            File dest = new File("C:\\Users\\Asus\\Documents\\Workflow Management Tool\\WorkflowManagementTool\\workflow\\src\\main\\resources\\images\\" + fileName);
+            imageFile.transferTo(dest);
+            user.setImageUrl("images/" + fileName); // Set image URL in UserResponse
+            return ResponseEntity.ok(user);
+        } catch (IOException e) {
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
+    }
+
+
+    private String encodeString(String text) {
+        return Base64.getEncoder().encodeToString(text.getBytes());
+    }
+
+
+
+
     @GetMapping("/userDetails")
     public UserResponse getUserById() {
         String userEmail = getEmailFromSecurityContext();
-        return userService.getUserByUserEmail(userEmail);
+        String encodedEmail = Base64.getEncoder().encodeToString(userEmail.getBytes());
+        String image = "images/"+encodedEmail+".jpg";
+        UserResponse userResponse =  userService.getUserByUserEmail(userEmail);
+        userResponse.setImageUrl(image);
+        return userResponse;
     }
 
     @GetMapping("/getUsername")

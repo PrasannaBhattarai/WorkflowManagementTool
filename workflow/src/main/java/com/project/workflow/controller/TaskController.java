@@ -1,14 +1,15 @@
 package com.project.workflow.controller;
 
+import com.project.workflow.models.Project;
 import com.project.workflow.models.Task;
 import com.project.workflow.models.User;
 import com.project.workflow.models.dto.RateTaskDTO;
 import com.project.workflow.models.dto.TasksDTO;
 import com.project.workflow.models.dto.UserDTO;
-import com.project.workflow.models.dto.UserEmails;
 import com.project.workflow.models.response.TaskForUsers;
-import com.project.workflow.models.response.UserResponse;
+import com.project.workflow.repository.ProjectRepository;
 import com.project.workflow.repository.UserRepository;
+import com.project.workflow.service.NotificationService;
 import com.project.workflow.service.TaskService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,6 +18,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @CrossOrigin(origins = "http://localhost:3000")
@@ -25,9 +27,18 @@ public class TaskController {
 
     private final TaskService taskService;
 
+    private final NotificationService notificationService;
 
-    public TaskController(TaskService taskService) {
+    private final UserRepository userRepository;
+
+    private final ProjectRepository projectRepository;
+
+
+    public TaskController(TaskService taskService, NotificationService notificationService, UserRepository userRepository, ProjectRepository projectRepository) {
         this.taskService = taskService;
+        this.notificationService = notificationService;
+        this.userRepository = userRepository;
+        this.projectRepository = projectRepository;
     }
 
 
@@ -45,6 +56,13 @@ public class TaskController {
             createdTask = taskService.createTask(task, userEmail, userEmail, projectId);
         }else{
             createdTask = taskService.createTask(task, userEmail, assignedUser, projectId);
+
+            //send notification
+            User user = userRepository.findUserByEmail(assignedUser);
+            Optional<Project> project = projectRepository.findById(projectId);
+            if (project.isPresent()){
+                notificationService.createTaskAssignNotification(user,project.get());
+            }
         }
         if (createdTask != null) {
             return new ResponseEntity<>(createdTask, HttpStatus.CREATED);

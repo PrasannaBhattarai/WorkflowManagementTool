@@ -1,11 +1,13 @@
 package com.project.workflow.models.response;
 
 public class UserResponse {
+
     private Long userId;
     private String firstName;
     private String lastName;
     private String email;
     private String userName;
+    private String imageUrl;
 
     public Long getUserId() {
         return userId;
@@ -45,5 +47,13 @@ public class UserResponse {
 
     public void setUserName(String userName) {
         this.userName = userName;
+    }
+
+    public String getImageUrl() {
+        return imageUrl;
+    }
+
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
     }
 }

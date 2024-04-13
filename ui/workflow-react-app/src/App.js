@@ -10,6 +10,7 @@ import EditUser from './pages/EditUser';
 import Project from './pages/Project';
 import ChartComponent from './pages/admin/ChartComponent';
 import UserAnalytics from './pages/admin/ProjectMonthlyGraph';
+import Notifications from './pages/Notifications';
 
 const App = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -42,6 +43,7 @@ const App = () => {
           <Route path="/home" element={isAuthenticated ? <Home /> : <Navigate to="/login" />} />
           <Route path="/edit-user-details" element={isAuthenticated ? <EditUser /> : <Navigate to="/login" />} />
           <Route path="/project" element={isAuthenticated ? <Project /> : <Navigate to="/login" />} />
+          <Route path="/notifications" element={isAuthenticated ? <Notifications /> : <Navigate to="/notifications" />} />
           <Route path="/login" element={<Login setShowAuthAlert={setShowAuthAlert} setErrorCode={setErrorCode} />} />
           <Route path="/register" element={<Register />} />
           <Route path="/auth-check" element={<AuthChecker />} />

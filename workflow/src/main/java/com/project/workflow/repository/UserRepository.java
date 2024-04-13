@@ -22,5 +22,7 @@ public interface UserRepository extends JpaRepository<User,Long> {
     @Query("UPDATE User u SET u.userRatings = :rating WHERE u.userId = :userId")
     void updateRatings(@Param("rating") double rating, @Param("userId") Long userId);
 
-    List<User> findByEmailContaining(String text);
+    @Query("SELECT u FROM User u WHERE u.email LIKE %:text% AND u.email <> :adminEmail AND u.userId NOT IN (:users)")
+    List<User> findByEmailContaining(@Param("text") String text, @Param("adminEmail") String adminEmail, @Param("users") List<Long> users);
+
 }

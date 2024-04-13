@@ -7,29 +7,41 @@
 .greeting {
   padding-left: 110px;
   padding: 30px;
-  height: 5vh; 
+  height: 10vh; 
   display: flex;
   align-items: center; 
   justify-content: start; 
   font-size: 20px; 
   width: 100%;
   box-sizing: border-box; 
-  background-color: rgb(209, 207, 207);
+  background-color: rgb(223, 220, 220);
   font-weight: bold;
+  font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  color: #645f5f;
 }
 
 .number svg {
   padding-left: 0;
   padding: 3px;
   position: absolute;
-  right: 30px;
-  top: 17px;
+  right: 33px;
+  top: 20px;
 }
 
-.person svg{
+.person {
   margin-top: 5px;
   margin-right: 15px;
 }
+
+.person img {
+  object-fit: cover;
+  height: 60px;
+  width: auto; 
+  max-width: 60px; 
+  border-radius: 50%;
+}
+
+
 
 .logout {
   position: fixed; 
@@ -154,22 +166,12 @@
   text-decoration: none;
 }
 
-
-
-
-
-/* .nav-panel a:active {
-  color: red;
-  text-decoration: none;
-} */
-
-
-
 .page {
   margin: 20px;
   padding: 20px;
-  border: 1px solid #ccc;
-  border-radius: 5px;
+  border: 1px solid #000000;
+  border-radius: 2vh;
+  background-color: rgb(241, 240, 240);
 }
 
 .form-group {
@@ -193,13 +195,13 @@ input[type="text"]
 }
 
 textarea {
-  margin-right: -2vh;
+  margin-right: -3.5vh;
   width: 77%;
   padding: 8px;
   border: 1px solid #ccc;
   border-radius: 4px;
-  box-sizing: border-box; /* Ensure padding and border are included in width calculation */
-  margin-bottom: 10px; /* Add some margin between form elements */
+  box-sizing: border-box; 
+  margin-bottom: 10px; 
 }
 
 select{
@@ -209,7 +211,7 @@ select{
   box-sizing: border-box;
   margin-bottom: 10px;
   border-radius: 4px;
-  margin-right: 65vh;
+  margin-right: 66vh;
 }
 
 .checkbox-group {
@@ -227,10 +229,14 @@ select{
   background-color: #6f42c1;
   color: #fff;
   border: none;
-  border-radius: 4px;
+  border-radius: 1vh;
   cursor: pointer;
   width: 50vh;
   margin: auto;
+}
+
+.page button :hover{
+  background-color: #5e3b9e;
 }
 
 
@@ -239,9 +245,10 @@ select{
   margin-bottom: 5px;
 }
 
-/* .labelCheck{
-  margin-right: 70vh;
-} */
+
+.projectType{
+  padding-left: 100px;
+}
 
 
 

@@ -1,5 +1,6 @@
 package com.project.workflow.service;
 
+import com.project.workflow.enums.InvitationStatus;
 import com.project.workflow.models.*;
 import com.project.workflow.models.dto.ProjectDTO;
 import com.project.workflow.models.dto.ProjectSettingsDTO;
@@ -23,8 +24,9 @@ public class ProjectService {
     private final SettingsRepository settingsRepository;
     private final UserRepository userRepository;
     private final ProjectUserRepository projectUserRepository;
+    private final ProjectInvitationService projectInvitationService;
 
-    public void changeSettings(Long projectId, ProjectSettingsDTO projectSettingsDTO){
+    public void changeSettings(Long projectId, ProjectSettingsDTO projectSettingsDTO, String inviteSender){
         Optional<ProjectSettings> guestAnnounce = projectSettingsRepository.findGuestAnnounce(projectId);
         Optional<ProjectSettings> selfAssign = projectSettingsRepository.findSelAssign(projectId);
         Optional<Settings> guestSettings = settingsRepository.findById(1L);
@@ -80,8 +82,10 @@ public class ProjectService {
 
         for (ProjectUserDTO userDTO: projectSettingsDTO.getEmails()) {
             User user = userRepository.findUserByEmail(userDTO.getUserId());
-            ProjectUser projectUser = new ProjectUser(user, tempProject, userDTO.getUserType(), userDTO.getProjectRole());
-            projectUserRepository.save(projectUser);
+            User sender = userRepository.findUserByEmail(inviteSender);
+            projectInvitationService.sendInvitation(user, sender, tempProject, null, userDTO.getUserType(), userDTO.getProjectRole());
+//            ProjectUser projectUser = new ProjectUser(user, tempProject, userDTO.getUserType(), userDTO.getProjectRole());
+//            projectUserRepository.save(projectUser);
         }
     }
 

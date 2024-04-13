@@ -1,41 +1,52 @@
 package com.project.workflow.models;
 
 import java.io.Serializable;
+import java.util.Objects;
+
 import jakarta.persistence.*;
 
 public class ProjectInvitationId implements Serializable {
 
-    private Long invitedUser;
-    private Long inviteSenderUser;
-    private Long project;
+    private User invitedUser;
+    private User inviteSenderUser;
+    private Project project;
 
-    public Long getInvitedUser() {
+    public User getInvitedUser() {
         return invitedUser;
     }
 
-    public void setInvitedUser(Long invitedUser) {
+    public void setInvitedUser(User invitedUser) {
         this.invitedUser = invitedUser;
     }
 
-    public Long getInviteSenderUser() {
+    public User getInviteSenderUser() {
         return inviteSenderUser;
     }
 
-    public void setInviteSenderUser(Long inviteSenderUser) {
+    public void setInviteSenderUser(User inviteSenderUser) {
         this.inviteSenderUser = inviteSenderUser;
     }
 
-    public Long getProject() {
+    public Project getProject() {
         return project;
     }
 
-    public void setProject(Long project) {
+    public void setProject(Project project) {
         this.project = project;
     }
 
-    public ProjectInvitationId(Long invitedUser, Long inviteSenderUser, Long project) {
-        this.invitedUser = invitedUser;
-        this.inviteSenderUser = inviteSenderUser;
-        this.project = project;
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        ProjectInvitationId that = (ProjectInvitationId) o;
+        return Objects.equals(invitedUser, that.invitedUser) &&
+                Objects.equals(inviteSenderUser, that.inviteSenderUser) &&
+                Objects.equals(project, that.project);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(invitedUser, inviteSenderUser, project);
     }
 }

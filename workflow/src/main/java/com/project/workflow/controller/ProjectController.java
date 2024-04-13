@@ -1,17 +1,16 @@
 package com.project.workflow.controller;
 
 import com.project.workflow.models.Project;
+import com.project.workflow.models.ProjectInvitation;
+import com.project.workflow.models.ProjectNotification;
 import com.project.workflow.models.ProjectUser;
-import com.project.workflow.models.User;
 import com.project.workflow.models.dto.*;
-import com.project.workflow.models.response.ProjectUserResponse;
-import com.project.workflow.models.response.UserResponse;
+import com.project.workflow.models.response.*;
 import com.project.workflow.repository.ProjectRepository;
 import com.project.workflow.repository.UserRepository;
-import com.project.workflow.service.ProjectService;
+import com.project.workflow.service.*;
 import com.project.workflow.interfaces.ProjectFactory;
-import com.project.workflow.service.ProjectUserService;
-import com.project.workflow.service.UserService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
@@ -20,6 +19,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -40,19 +40,29 @@ public class ProjectController {
 
     private final UserService userService;
 
+    private final AnnouncementService announcementService;
+
+    private final ProjectInvitationService projectInvitationService;
+
+    private final NotificationService notificationService;
+
 
     private String getEmailFromSecurityContext() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         return authentication != null ? authentication.getName() : "";
     }
 
-    public ProjectController(ProjectUserService projectUserService, ProjectRepository projectRepository, ProjectService projectService, ProjectFactory projectFactory, UserRepository userRepository, UserService userService) {
+    @Autowired
+    public ProjectController(ProjectUserService projectUserService, ProjectRepository projectRepository, ProjectService projectService, ProjectFactory projectFactory, UserRepository userRepository, UserService userService, AnnouncementService announcementService, ProjectInvitationService projectInvitationService, NotificationService notificationService) {
         this.projectUserService = projectUserService;
         this.projectRepository = projectRepository;
         this.projectService = projectService;
         this.projectFactory = projectFactory;
         this.userRepository = userRepository;
         this.userService = userService;
+        this.announcementService = announcementService;
+        this.projectInvitationService = projectInvitationService;
+        this.notificationService = notificationService;
     }
 
     //test purposes only
@@ -62,9 +72,107 @@ public class ProjectController {
         return "Hi " + userEmail;
     }
 
+    @GetMapping("/getNotificationNumber")
+    public int getNumberOfNotification(){
+        String userEmail = getEmailFromSecurityContext();
+        return notificationService.getNumberofNotification(userEmail);
+    }
+
+    @PutMapping("/notificationChecked")
+    public void notificationChecked(){
+        String userEmail = getEmailFromSecurityContext();
+        notificationService.completeNotification(userEmail);
+    }
+
+
+
+
+    @GetMapping("/getNotifications")
+    public List<NotificationResponse> getNotification(){
+        try{
+            String userEmail = getEmailFromSecurityContext();
+            Optional<List<ProjectNotification>> projectNotifications = notificationService.getNotification(userEmail);
+
+            List<NotificationResponse> notificationResponses = new ArrayList<>();
+            if (projectNotifications.isPresent()) {
+                for (ProjectNotification projectNotification : projectNotifications.get()) {
+                    NotificationResponse response = new NotificationResponse();
+                    response.setNotificationId(projectNotification.getNotification().getNotificationId());
+                    response.setNotificationMessage(projectNotification.getNotification().getNotificationMessage());
+                    response.setNotificationType(projectNotification.getNotification().getNotificationType());
+                    response.setSenderId(projectNotification.getSenderUser().getEmail());
+                    response.setSenderName(projectNotification.getSenderUser().getFirstName() + " " + projectNotification.getSenderUser().getLastName());
+                    response.setProjectId(projectNotification.getProject().getProjectId());
+                    response.setProjectName(projectNotification.getProject().getProjectName());
+                    notificationResponses.add(response);
+                }
+            }
+            return notificationResponses;
+
+        } catch (Exception exception){
+            System.out.println(exception);
+            throw new RuntimeException("Error getting notifications");
+        }
+    }
+
+    @GetMapping("/getInvitations")
+    public List<InvitationResponse> getInvitations(){
+        try{
+            String userEmail = getEmailFromSecurityContext();
+            Optional<List<ProjectInvitation>> projectInvitations = notificationService.getInvitations(userEmail);
+            List<InvitationResponse> invitationResponses = new ArrayList<>();
+            if (projectInvitations.isPresent()) {
+                for (ProjectInvitation projectInvitation : projectInvitations.get()) {
+                    InvitationResponse response = new InvitationResponse();
+                    response.setSenderName(projectInvitation.getInviteSenderUser().getFirstName() + " " + projectInvitation.getInviteSenderUser().getLastName());
+                    response.setSenderId(projectInvitation.getInviteSenderUser().getEmail());
+                    response.setProjectId(projectInvitation.getProject().getProjectId());
+                    response.setProjectName(projectInvitation.getProject().getProjectName());
+                    response.setUserRole(projectInvitation.getUserRole());
+                    response.setUserType(projectInvitation.getUserType());
+                    invitationResponses.add(response);
+                }
+            }
+            return invitationResponses;
+        } catch (Exception exception){
+            System.out.println(exception);
+            throw new RuntimeException("Error getting notifications");
+        }
+    }
+
+
+
+
+    @PostMapping("/acceptInvitation/{projectId}")
+    public void acceptInvitation( @PathVariable Long projectId){
+        try{
+            String userEmail = getEmailFromSecurityContext();
+            projectInvitationService.acceptInvitation(userEmail,projectId);
+        }
+        catch (Exception ex){
+            System.out.println(ex);
+            throw new RuntimeException("Error accepting invitation");
+        }
+    }
+
+    @PostMapping("/rejectInvitation/{projectId}")
+    public void rejectInvitation( @PathVariable Long projectId){
+        try{
+            String userEmail = getEmailFromSecurityContext();
+            projectInvitationService.rejectInvitation(userEmail,projectId);
+        }
+        catch (Exception ex){
+            System.out.println(ex);
+            throw new RuntimeException("Error accepting invitation");
+        }
+    }
+
+
+
     @PostMapping("/edit/{projectId}")
     public void editProject(@PathVariable Long projectId, @RequestBody ProjectSettingsDTO projectSettingsDTO){
-        projectService.changeSettings(projectId, projectSettingsDTO);
+        String userEmail = getEmailFromSecurityContext();
+        projectService.changeSettings(projectId, projectSettingsDTO, userEmail);
     }
 
 
@@ -155,10 +263,10 @@ public class ProjectController {
         }
     }
 
-    @GetMapping("/search/{text}")
-    public List<UserDTO> searchUsersByEmail(@PathVariable String text) {
+    @GetMapping("/search/{projectId}/{text}")
+    public List<UserDTO> searchUsersByEmail(@PathVariable Long projectId,@PathVariable String text) {
         try {
-            List<UserDTO> users = userService.getSearchUsers(text);
+            List<UserDTO> users = userService.getSearchUsers(projectId,text);
             return users.isEmpty() ? null : users;
         } catch (Exception e) {
             e.printStackTrace();
@@ -166,9 +274,50 @@ public class ProjectController {
         }
     }
 
+
     @GetMapping("/searchSettings/{projectId}")
     public ProjectSettingsDTO getSettings(@PathVariable Long projectId){
         return projectService.getProjectSettings(projectId);
     }
+
+
+    @PostMapping("/announcement/{projectId}")
+    public ResponseEntity<?> createAnnouncement(@RequestBody AnnouncementDTO announcementDTO, @PathVariable Long projectId) {
+        try {
+            String userEmail = getEmailFromSecurityContext();
+            AnnouncementDTO createdAnnouncement = announcementService.createAnnouncement(announcementDTO, userEmail, projectId);
+            return new ResponseEntity<>(createdAnnouncement, HttpStatus.CREATED);
+        } catch (Exception e) {
+            return new ResponseEntity<>("Failed to create announcement", HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @GetMapping("/getAnnouncements/{projectId}")
+    public ResponseEntity<List<AnnouncementResponse>> getAnnouncementsByProjectId(@PathVariable Long projectId) {
+        List<AnnouncementResponse> announcements = announcementService.getAnnouncementsByProjectId(projectId);
+        return new ResponseEntity<>(announcements, HttpStatus.OK);
+    }
+
+    @PutMapping("/edit-announcement/{announcementId}")
+    public ResponseEntity<?> updateAnnouncement(@PathVariable Long announcementId, @RequestBody AnnouncementDTO announcementDTO) {
+        try {
+            AnnouncementDTO updatedAnnouncement = announcementService.updateAnnouncement(announcementId, announcementDTO);
+            return new ResponseEntity<>(updatedAnnouncement, HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>("Failed to update announcement", HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @DeleteMapping("/delete-announcement/{announcementId}")
+    public ResponseEntity<?> deleteAnnouncement(@PathVariable Long announcementId) {
+        try {
+            announcementService.deleteAnnouncement(announcementId);
+            return new ResponseEntity<>("Announcement deleted successfully", HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>("Failed to delete announcement", HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+
 
 }

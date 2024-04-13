@@ -19,16 +19,16 @@ public class SecurityConfig {
     private final JwtAuthenticationFilter jwtAuthenticationFilter;
     private final AuthenticationProvider authenticationProvider;
 
-    @Value("${admin.email}")
-    private String adminEmail;
+//    @Value("${admin.email}")
+//    private String adminEmail;
+//
+//    @Value("${admin.password}")
+//    private String adminPassword;
 
-    @Value("${admin.password}")
-    private String adminPassword;
-
-    @Bean
-    public AuthenticationProvider adminAuthenticationProvider() {
-        return new AdminAuthenticationProvider(adminEmail, adminPassword);
-    }
+//    @Bean
+//    public AuthenticationProvider adminAuthenticationProvider() {
+//        return new AdminAuthenticationProvider(adminEmail, adminPassword);
+//    }
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
@@ -38,7 +38,7 @@ public class SecurityConfig {
                 .csrf()
                 .disable()
                 .authorizeHttpRequests()
-                .requestMatchers("/hello/**","/ws/**","/chat.sendMessage/**","/chat.addUser/**","/topic/**","/app/**").permitAll()
+                .requestMatchers("/hello/**","/ws/**","/chat.sendMessage/**","/chat.addUser/**","/topic/**","/app/**","/images/**").permitAll()
                 .anyRequest()
                 .authenticated()
                 .and()
@@ -49,25 +49,25 @@ public class SecurityConfig {
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
         return httpSecurity.build();
     }
-//
-    @Bean
-    public SecurityFilterChain adminSecurityFilterChain(HttpSecurity httpSecurity) throws Exception {
-        httpSecurity
-                .cors()
-                .and()
-                .csrf()
-                .disable()
-                .authorizeHttpRequests()
-                .requestMatchers("/admin/**")
-                .authenticated()
-                .anyRequest()
-                .permitAll()
-                .and()
-                .sessionManagement()
-                .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-                .and()
-                .authenticationProvider(adminAuthenticationProvider());
-        return httpSecurity.build();
-    }
+
+//    @Bean
+//    public SecurityFilterChain adminSecurityFilterChain(HttpSecurity httpSecurity) throws Exception {
+//        httpSecurity
+//                .cors()
+//                .and()
+//                .csrf()
+//                .disable()
+//                .authorizeHttpRequests()
+//                .requestMatchers("/admin/**")
+//                .authenticated()
+//                .anyRequest()
+//                .permitAll()
+//                .and()
+//                .sessionManagement()
+//                .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+//                .and()
+//                .authenticationProvider(adminAuthenticationProvider());
+//        return httpSecurity.build();
+//    }
 
 }

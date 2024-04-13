@@ -29,7 +29,8 @@ const Settings = () => {
 
     const fetchUsersByEmail = async (text) => {
         try {
-            const response = await fetch(`http://localhost:8081/api/project/search/${text}`, {
+            const projectId = new URLSearchParams(location.search).get('id');
+            const response = await fetch(`http://localhost:8081/api/project/search/${projectId}/${text}`, {
                 method: 'GET',
                 headers: {
                     'Authorization': `Bearer ${localStorage.getItem('token')}`,
