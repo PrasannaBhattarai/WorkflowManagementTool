@@ -192,6 +192,11 @@ public class ProjectController {
             projectSaved.getProjectId();
         }
 
+        String userEmail = getEmailFromSecurityContext();
+
+        //add projectUser instance
+        projectService.createProjectUser(userEmail, projectSaved);
+
         return new ResponseEntity<>(projectSaved,HttpStatus.CREATED);
     }
 

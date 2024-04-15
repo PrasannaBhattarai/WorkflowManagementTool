@@ -25,6 +25,23 @@ public class ProjectService {
     private final UserRepository userRepository;
     private final ProjectUserRepository projectUserRepository;
     private final ProjectInvitationService projectInvitationService;
+    private final ProjectUserService projectUserService;
+
+
+    public void createProjectUser(String userEmail, Project projectSaved){
+        try{
+            User user = userRepository.findUserByEmail(userEmail);
+            ProjectUserDTO projectUserDTO = new ProjectUserDTO();
+            projectUserDTO.setProjectRole("Leader");
+            projectUserDTO.setUserId(userEmail);
+            projectUserDTO.setUserType("Creator");
+            projectUserDTO.setProjectId(projectSaved.getProjectId());
+            projectUserService.addProjectUser(projectUserDTO);
+        }catch (Exception exception){
+            System.out.println(exception);
+            throw new RuntimeException("Project User Error Creating!");
+        }
+    }
 
     public void changeSettings(Long projectId, ProjectSettingsDTO projectSettingsDTO, String inviteSender){
         Optional<ProjectSettings> guestAnnounce = projectSettingsRepository.findGuestAnnounce(projectId);
@@ -83,7 +100,7 @@ public class ProjectService {
         for (ProjectUserDTO userDTO: projectSettingsDTO.getEmails()) {
             User user = userRepository.findUserByEmail(userDTO.getUserId());
             User sender = userRepository.findUserByEmail(inviteSender);
-            projectInvitationService.sendInvitation(user, sender, tempProject, null, userDTO.getUserType(), userDTO.getProjectRole());
+            projectInvitationService.sendInvitation(user, sender, tempProject, null, userDTO.getProjectRole(), userDTO.getUserType());
 //            ProjectUser projectUser = new ProjectUser(user, tempProject, userDTO.getUserType(), userDTO.getProjectRole());
 //            projectUserRepository.save(projectUser);
         }

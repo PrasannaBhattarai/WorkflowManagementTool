@@ -11,11 +11,14 @@ import Project from './pages/Project';
 import ChartComponent from './pages/admin/ChartComponent';
 import UserAnalytics from './pages/admin/ProjectMonthlyGraph';
 import Notifications from './pages/Notifications';
+import UserRequests from './pages/admin/UserRequests';
 
 const App = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [showAuthAlert, setShowAuthAlert] = useState(false);
   const [errorCode, setErrorCode] = useState(null);
+  const [isAdminAuthenticated, setIsAdminAuthenticated] = useState(false);
+
 
   useEffect(() => {
     const token = localStorage.getItem('token');
@@ -44,7 +47,7 @@ const App = () => {
           <Route path="/edit-user-details" element={isAuthenticated ? <EditUser /> : <Navigate to="/login" />} />
           <Route path="/project" element={isAuthenticated ? <Project /> : <Navigate to="/login" />} />
           <Route path="/notifications" element={isAuthenticated ? <Notifications /> : <Navigate to="/notifications" />} />
-          <Route path="/login" element={<Login setShowAuthAlert={setShowAuthAlert} setErrorCode={setErrorCode} />} />
+          <Route path="/login" element={<Login setShowAuthAlert={setShowAuthAlert} setErrorCode={setErrorCode} setIsAdminAuthenticated={setIsAdminAuthenticated} />} />
           <Route path="/register" element={<Register />} />
           <Route path="/auth-check" element={<AuthChecker />} />
           <Route path="/hello" element={isAuthenticated ? <Hello /> : <Navigate to="/login" />} />
@@ -52,8 +55,12 @@ const App = () => {
           <Route path="/" element={<Navigate to="/login" />} />
           {/* <Route path="*" element={<Navigate to="/login" />} /> */}
 
-          <Route path="/chart" element={<ChartComponent />} />
-          <Route path="/user" element={<UserAnalytics />} />
+
+          {/* Allow only admins to access these routes */}
+          <Route path="/chart" element={isAdminAuthenticated ? <ChartComponent /> : <Navigate to="/login" />} />
+          <Route path="/user" element={isAdminAuthenticated ? <UserAnalytics /> : <Navigate to="/login" />} />
+          <Route path="/request" element={isAdminAuthenticated ? <UserRequests /> : <Navigate to="/login" />} />
+
         </Routes>
       </div>
     </Router>

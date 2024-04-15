@@ -3,8 +3,11 @@ package com.project.workflow.controller;
 import com.project.workflow.models.AuthenticationResponse;
 import com.project.workflow.models.RegisterBody;
 import com.project.workflow.models.dto.EmailRequest;
+import com.project.workflow.models.dto.RegisterBodyWithImg;
 import com.project.workflow.service.EmailService;
 import com.project.workflow.service.UserService;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -28,8 +31,9 @@ public class TestController {
         return "hi";
     }
 
+
     @PostMapping("/registerUser")
-    public ResponseEntity<AuthenticationResponse> register(@RequestBody RegisterBody registerBody){
+    public HttpEntity<HttpStatus> register(@ModelAttribute RegisterBodyWithImg registerBody){
         return ResponseEntity.ok(userService.register(registerBody));
     }
 

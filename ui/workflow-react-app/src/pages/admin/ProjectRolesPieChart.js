@@ -22,7 +22,6 @@ const ProjectRolesPieChart = () => {
 
     return (
         <div className='container-chart'> 
-            <h2>Project Roles Pie Chart</h2>
             <div className='project-roles-pie-chart' >
                 {chartData ? (
                     <Pie

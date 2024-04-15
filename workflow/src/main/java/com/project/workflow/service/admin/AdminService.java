@@ -1,5 +1,10 @@
 package com.project.workflow.service.admin;
 
+import com.project.workflow.models.RegisterBody;
+import com.project.workflow.models.UnregisteredUser;
+import com.project.workflow.models.User;
+import com.project.workflow.repository.UnregisteredUserRepository;
+import com.project.workflow.repository.UserRepository;
 import com.project.workflow.security.JwtService;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
@@ -10,9 +15,15 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+import java.util.Optional;
+
 @Service
 @RequiredArgsConstructor
 public class AdminService {
+
+    private final UnregisteredUserRepository unregisteredUserRepository;
+    private final UserRepository userRepository;
 
     @Value("${admin.email}")
     private String adminEmail;
@@ -37,5 +48,26 @@ public class AdminService {
         throw  new BadCredentialsException(null);
     }
 
+
+    public List<UnregisteredUser> findAllRegisteredUsers(){
+        return unregisteredUserRepository.findAll();
+    }
+
+    public void registerUser(Long id){
+        Optional<UnregisteredUser> registerBody = unregisteredUserRepository.findById(id);
+        if (registerBody.isPresent()) {
+            User user = new User();
+            user.setEmail(registerBody.get().getEmail());
+            user.setUserName(registerBody.get().getUserName());
+            user.setUserRatings(registerBody.get().getUserRatings());
+            user.setPassword(registerBody.get().getPassword());
+            user.setFirstName(registerBody.get().getFirstName());
+            user.setLastName(registerBody.get().getLastName());
+            userRepository.save(user);
+
+            //remove from unregistered database
+            unregisteredUserRepository.deleteById(id);
+        }
+    }
 
 }

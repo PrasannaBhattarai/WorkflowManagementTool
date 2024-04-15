@@ -1,9 +1,119 @@
-.container-chart { 
-    max-width: 800px;
+.container-chart {
+    display: flex;
+    max-width: 100%;
     margin: 0 auto;
+    height: 100vh;
 }
 
-.project-bar { 
-    max-width: 600px;
-    margin: 0 auto;
+.navigation-pane {
+    flex: 1;
+    padding: 10px;
+    background-color: #042564;
+    max-width: 20%;
+    color: white;
+}
+
+.chart-pane {
+    flex: 3;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    max-height: 100vh;
+    overflow-y:scroll;
+    overflow-x: hidden;
+}
+
+.navigation-links {
+    display: flex;
+    flex-direction: column;
+}
+
+.navigation-links a {
+    text-decoration: none;
+    color: #ffffff;
+    margin-bottom: 10px;
+    padding: 8px 12px;
+    border-radius: 4px;
+    width: calc(100% - 24px); 
+    display: block; 
+}
+
+.navigation-links a:hover {
+    background-color: #3d4c8d;
+}
+
+.navigation-links a.active {
+    background-color: rgb(23, 23, 172);
+    color: white;
+    width: calc(100% - 20px); 
+    display: block; 
+}
+
+
+.project-bar-container {
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+    margin-bottom: 20px;
+}
+
+.project-bar {
+    max-width: 800px;
+    display: flex;
+    background-color: rgb(255, 255, 255);
+    border-radius: 1vh;
+}
+
+.chart-count {
+    background-color: rgb(255, 255, 255);
+    text-align: center;
+    margin: auto;
+    padding: 20px 100px;
+    margin-left: 150px;
+    border-radius: 2vh;
+}
+
+
+.charts-container {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.chart-1 {
+    flex: 1;
+    margin-right: 20px;
+    margin-bottom: 20px;
+    background-color: rgb(255, 255, 255);
+    text-align: center;
+    max-height: 65vh;
+    padding-bottom: 20px;
+    border-radius: 2vh;
+}
+
+.chart-2 {
+    flex: 1;
+    margin-right: 20px;
+    margin-bottom: 20px;
+    background-color: rgb(255, 255, 255);
+    text-align: center;
+    max-height: 55vh;
+    border-radius: 2vh;
+}
+
+.horizontal-line{
+    border-color: rgb(0, 0, 0);
+    border-width: 1px;
+    width: 170vh;
+}
+
+
+.bottom-container{
+    display: flex;
+}
+
+.logout-button {
+    position: absolute; 
+    bottom: 5vh; 
+    left: 4.5vh;
+    width: 30vh;
 }

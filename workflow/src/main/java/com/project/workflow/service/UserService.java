@@ -1,22 +1,30 @@
 package com.project.workflow.service;
 
+import com.project.workflow.exceptions.ForbiddenException;
 import com.project.workflow.models.*;
+import com.project.workflow.models.dto.RegisterBodyWithImg;
 import com.project.workflow.models.dto.UserDTO;
 import com.project.workflow.models.response.UserResponse;
 import com.project.workflow.repository.ProjectUserRepository;
+import com.project.workflow.repository.UnregisteredUserRepository;
 import com.project.workflow.repository.UserRepository;
 import com.project.workflow.security.JwtService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -28,6 +36,7 @@ public class UserService {
     private final JwtService jwtService;
     private final AuthenticationManager authenticationManager;
     private final ProjectUserRepository projectUserRepository;
+    private final UnregisteredUserRepository unregisteredUserRepository;
 
     //injecting in-memory user variables
     @Value("${admin.email}")
@@ -36,23 +45,89 @@ public class UserService {
     @Value("${admin.password}")
     private String adminPassword;
 
-    public AuthenticationResponse register(RegisterBody registerBody) {
-        var user = User.builder()
-                .firstName(registerBody.getFirstName())
-                .lastName(registerBody.getLastName())
-                .email(registerBody.getEmail())
-                .password(passwordEncoder.encode(registerBody.getPassword()))
-                .userName(registerBody.getUserName())
-                .userRatings(0)
-                .build();
-        userRepository.save(user);
-        var jwtToken = jwtService.generateToken(user);
-        return AuthenticationResponse.builder()
-                .token(jwtToken)
-                .build();
+
+    public HttpStatus checkRegistrationAvailable(RegisterBodyWithImg registerBody){
+        try{
+            Optional<User> user = userRepository.findByEmail(registerBody.getEmail());
+            if (user.isPresent()) {
+                return HttpStatus.BAD_REQUEST;
+            }
+            else {
+                return HttpStatus.OK;
+            }
+        }catch (Exception exception){
+            System.out.println(exception);
+            return HttpStatus.INTERNAL_SERVER_ERROR;
+        }
     }
 
+
+    public HttpStatus register(RegisterBodyWithImg registerBody) {
+        try {
+
+            HttpStatus registrationStatus = checkRegistrationAvailable(registerBody);
+            if (registrationStatus != HttpStatus.OK) {
+                // registration is not available
+                return registrationStatus;
+            }
+
+            // Create user object
+            var user = UnregisteredUser.builder()
+                    .firstName(registerBody.getFirstName())
+                    .lastName(registerBody.getLastName())
+                    .email(registerBody.getEmail())
+                    .password(passwordEncoder.encode(registerBody.getPassword()))
+                    .userName(registerBody.getUserName())
+                    .userRatings(0)
+                    .build();
+
+            // Save user to repository
+            //userRepository.save(user);
+
+            unregisteredUserRepository.save(user);
+
+            // Generate JWT token
+            //var jwtToken = jwtService.generateToken(user);
+
+            // Save image with encoded email name in resources/static/images directory
+            String encodedEmail = encodeString(registerBody.getEmail());
+            String imagePath = "static/images/" + encodedEmail + ".jpg";
+            saveImage(registerBody.getImageData(), imagePath, encodedEmail);
+
+            return HttpStatus.OK;
+//            return AuthenticationResponse.builder()
+//                    .token(jwtToken)
+//                    .build();
+        } catch (Exception exception) {
+            System.out.println(exception);
+            throw new RuntimeException("Register fail");
+        }
+    }
+
+    // Method to encode a string using Base64
+    private String encodeString(String text) {
+        return Base64.getEncoder().encodeToString(text.getBytes());
+    }
+
+    // Method to save image data to file
+    private void saveImage(MultipartFile imageData, String imagePath, String encodedEmail) throws IOException {
+        try {
+            byte[] bytes = imageData.getBytes();
+            String fileName = encodedEmail + ".jpg";
+            File dest = new File("C:\\Users\\Asus\\Documents\\Workflow Management Tool\\WorkflowManagementTool\\workflow\\src\\main\\resources\\static\\images\\" + fileName);
+            imageData.transferTo(dest);
+
+        }catch (Exception exception) {
+            System.out.println(exception);
+            throw new RuntimeException("Error converting to byte");
+        }
+    }
+
+
     public AuthenticationResponse authenticate(RegisterBody registerBody) throws Exception {
+        if (registerBody.getEmail().equals(adminEmail) && registerBody.getPassword().equals(adminPassword)){
+            throw new ForbiddenException("Access Forbidden: You are trying to access as an admin.");
+        }
         authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
                         registerBody.getEmail(),

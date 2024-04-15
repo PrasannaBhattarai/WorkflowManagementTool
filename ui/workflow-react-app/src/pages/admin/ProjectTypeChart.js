@@ -1,5 +1,3 @@
-// ProjectTypePieChart.js
-
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { Pie } from 'react-chartjs-2';
@@ -21,8 +19,8 @@ const ProjectTypePieChart = () => {
     }, []);
 
     return (
-        <div className='container-chart'> 
-            <h2>Project Type Pie Chart</h2>
+        <div className='graph-chart'> 
+           
             <div className='project-type-pie' >
                 {chartData ? (
                     <Pie

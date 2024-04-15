@@ -1,0 +1,20 @@
+
+.stats {
+    background-color: red;
+    margin: auto;
+    display: flex; 
+    justify-content: space-around;
+    width: 100%;
+}
+
+.top-users {
+    background-color: rebeccapurple;
+}
+
+
+.top-projects {
+    background-color: rgb(50, 134, 50);
+    max-width: 1200px;
+    max-height: 50vh;
+}
+

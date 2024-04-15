@@ -53,7 +53,7 @@ public class UserController {
             String fileName = encodedEmail + ".jpg";
             File dest = new File("C:\\Users\\Asus\\Documents\\Workflow Management Tool\\WorkflowManagementTool\\workflow\\src\\main\\resources\\images\\" + fileName);
             imageFile.transferTo(dest);
-            user.setImageUrl("images/" + fileName); // Set image URL in UserResponse
+            user.setImageUrl("images/" + fileName); // setting image URL in UserResponse
             return ResponseEntity.ok(user);
         } catch (IOException e) {
             e.printStackTrace();

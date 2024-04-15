@@ -1,10 +1,9 @@
 import React, { useState } from 'react';
-import { Navigate, useNavigate, Link } from 'react-router-dom';
+import { Navigate, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import './css/Login.css';
 
-
-const Login = ({ setShowAuthAlert, setErrorCode }) => {
+const Login = ({ setShowAuthAlert, setErrorCode, setIsAdminAuthenticated }) => {
   const [formData, setFormData] = useState({
     email: '',
     password: '',
@@ -19,22 +18,44 @@ const Login = ({ setShowAuthAlert, setErrorCode }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
+    let response; // Define response variable outside try-catch block
+
     try {
-        const response = await axios.post(
-            'http://localhost:8081/hello/authenticate',
-            formData
-        );
+      // Try regular user authentication
+      localStorage.removeItem('token');
 
-        const token = response.data.token;
+      document.cookie = 'custom_cookie=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
 
-        localStorage.setItem('token', token);
+      response = await axios.post(
+        'http://localhost:8081/hello/authenticate',
+        formData
+      );
 
-        navigate('/home');
+      // If regular user authentication succeeds, set token to localStorage and navigate to home
+      const token = response.data.token;
+      localStorage.setItem('token', token);
+      setIsAdminAuthenticated(false); 
+      navigate('/home');
 
     } catch (error) {
       if (error.response && error.response.status === 403) {
-        setErrorCode(403);
-        setShowAuthAlert(true);
+        try {
+          localStorage.removeItem('token');
+          response = await axios.post(
+            'http://localhost:8081/hello/authenticateAdmin',
+            formData
+          );
+         
+          // If admin authentication succeeds, set token to cookie and navigate to home
+          const token = response.data.token;
+          document.cookie = `custom_cookie=${token}; path=/`;
+          setIsAdminAuthenticated(true);
+          navigate('/chart');
+        } catch (adminError) {
+          // If admin authentication also fails, show authentication error
+          setErrorCode(403);
+          setShowAuthAlert(true);
+        }
       } else {
         console.error('Error during login:', error);
       }
@@ -58,7 +79,7 @@ const Login = ({ setShowAuthAlert, setErrorCode }) => {
       </div>
       <div className="right-container">
         <div className="login-form">
-        <h2>Login</h2>
+          <h2>Login</h2>
           <form onSubmit={handleSubmit}>
             <label>
               Email:

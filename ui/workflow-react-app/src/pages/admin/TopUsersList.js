@@ -20,11 +20,9 @@ const TopUsersList = () => {
     return (
         <div>
             <h2>Top 5 Users</h2>
-            <ul>
                 {userData.map((user, index) => (
-                    <li key={index}>{user.name} - Ratings: {user.user_ratings}</li>
+                    <p key={index}>{user.name} - Ratings: {user.user_ratings}</p>
                 ))}
-            </ul>
         </div>
     );
 };
