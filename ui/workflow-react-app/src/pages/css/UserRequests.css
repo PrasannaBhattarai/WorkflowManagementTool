@@ -1,0 +1,105 @@
+
+.users-container {
+    width: 80%;
+    margin-top: 20px;
+    max-height: 100vh;
+    overflow-y: auto; 
+}
+
+.users-card {
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    padding: 10px;
+    margin-bottom: 20px;
+}
+
+.users-card p {
+    margin: 5px 0;
+}
+
+.users-action-buttons {
+    display: flex;
+    justify-content: center;
+    
+}
+
+.users-action-buttons button {
+    flex-grow: 1;
+    margin: 0 5px;
+    padding: 8px 15px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-bottom: 20px;
+}
+
+.approve-button {
+    background-color: #4caf50;
+    max-width: 30vh;
+    color: #fff;
+}
+
+.decline-button {
+    background-color: #f44336;
+    max-width: 30vh;
+    color: #fff;
+}
+
+.approve-button:hover,.decline-button:hover {
+    background-color: rgb(167, 104, 158);
+}
+
+.user-images {
+    width: 150px;
+    height: 150px;
+    overflow: hidden;
+    margin-right: 20px;
+    margin-left: 15vh;
+    margin-top: 2vh;
+    border-radius: 50%;
+}
+
+.user-images img {
+    width: 100%;
+    height: auto; 
+}
+
+.user-details{
+    display: flex;
+}
+
+.user-details .user-text {
+    text-align: center;
+    padding: 20px 70px;
+    margin: 0 auto;
+    margin-left: 7vh;
+    display: flex;
+}
+
+.name-row,
+.info-row {
+    display: flex;
+    flex-direction: column;
+}
+
+.name-row h3,
+.info-row h3 {
+    margin: 10px;
+}
+
+.name-row{
+    text-align: left;
+    margin-right: 20vh;
+}
+
+.info-row{
+    text-align: left;
+}
+
+.no-req{
+    margin-left: 3vh;
+}
+
+.req-line{
+    margin-left: -3vh;
+}

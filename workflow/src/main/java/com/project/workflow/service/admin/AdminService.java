@@ -38,6 +38,7 @@ public class AdminService {
 
     public void authorizeAdmin(HttpServletRequest request) throws BadCredentialsException {
     Cookie[] cookies = request.getCookies();
+
         if (cookies != null) {
             for (Cookie cookie : cookies) {
                 if ("custom_cookie".equals(cookie.getName()) && adminEmail.equals(getEmailFromSecurityContext())){
@@ -68,6 +69,10 @@ public class AdminService {
             //remove from unregistered database
             unregisteredUserRepository.deleteById(id);
         }
+    }
+
+    public void declineRequest(Long id){
+        unregisteredUserRepository.deleteById(id);
     }
 
 }

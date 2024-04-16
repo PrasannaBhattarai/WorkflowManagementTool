@@ -16,17 +16,19 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
-from .views import chart_data, project_type_data, project_status_data, project_count,  project_monthly_data, project_roles_data, top_users_data, user_count
+from .views import chart_data, project_type_data, project_status_data, project_count,  project_monthly_data, project_roles_data, top_users_data, user_count, send_email, send_rejection_email
 
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('chart-data/', chart_data, name='chart-data'),
-     path('project-type-data/', project_type_data, name='project-type-data'),
-     path('project-status-data/', project_status_data, name='project-status-data'),
-     path('project-count/', project_count, name='project-count'),
-     path('project-monthly-data/', project_monthly_data, name='project-monthly-data'),
-     path('project-roles-data/', project_roles_data, name='project-roles-data'),
-     path('top-users-data/', top_users_data, name='top-users-data'),
-     path('user-count/', user_count, name='user-count'),
+    path('project-type-data/', project_type_data, name='project-type-data'),
+    path('project-status-data/', project_status_data, name='project-status-data'),
+    path('project-count/', project_count, name='project-count'),
+    path('project-monthly-data/', project_monthly_data, name='project-monthly-data'),
+    path('project-roles-data/', project_roles_data, name='project-roles-data'),
+    path('top-users-data/', top_users_data, name='top-users-data'),
+    path('user-count/', user_count, name='user-count'),
+    path('send-email/<str:user_email>/', send_email, name='send_email'),
+    path('send-rejection-email/<str:user_email>/', send_rejection_email, name='send_rejection_email'),
 ]

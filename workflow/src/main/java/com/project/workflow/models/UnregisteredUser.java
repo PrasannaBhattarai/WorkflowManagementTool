@@ -38,4 +38,6 @@ public class UnregisteredUser {
     @Column(name = "userRatings")
     private float userRatings;
 
+    private String imageUrl;
+
 }

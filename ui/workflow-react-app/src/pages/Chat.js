@@ -45,7 +45,6 @@ const ChatApp = () => {
         };
 
         const response = await axios.get('http://localhost:8081/api/user/getUsername', { headers });
-        console.log(response.data.username);
         setUsername(response.data.username);
         setUsernameFetched(true);
 
@@ -106,8 +105,10 @@ const ChatApp = () => {
       messageElement = (
         <li className="chat-message">
           <i style={{ backgroundColor: avatarColor }}>{message.sender[0]}</i>
-          <span>{message.sender}</span>
-          <p>{message.content}</p>
+          <div className="message-content">
+            <span>{message.sender}</span>
+            <p>{message.content}</p>
+          </div>
         </li>
       );
     }
@@ -125,18 +126,18 @@ const ChatApp = () => {
   };
 
   return (
-    <div>
+    <div className="chat-container">
       {connecting && <div className="connecting">Connecting...</div>}
       {usernameFetched ? (
         <div id="chat-page">
+          <ul id="messageArea">{messageArea}</ul>
           <form id="messageForm" onSubmit={sendMessage}>
             <input type="text" id="message" placeholder="Type your message" value={messageInput} onChange={(e) => setMessageInput(e.target.value)} />
-            <button type="submit">Send</button>
+            <button className='send-button' type="submit">Send</button>
           </form>
-          <ul id="messageArea">{messageArea}</ul>
         </div>
       ) : (
-        <div id="username-page">
+        <div id="username-page" className="username-page-container">
           <p>Loading username...</p>
         </div>
       )}

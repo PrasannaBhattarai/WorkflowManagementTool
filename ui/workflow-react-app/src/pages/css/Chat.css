@@ -60,7 +60,7 @@ a {
     color: #6db33f;
 }
 
-button {
+.send-button {
     box-shadow: none;
     border: 1px solid transparent;
     font-size: 14px;
@@ -75,19 +75,19 @@ button {
     min-height: 38px;
 }
 
-button.default {
+.send-button.default {
     background-color: #e8e8e8;
     color: #333;
     box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.12);
 }
 
-button.primary {
+.send-button.primary {
     background-color: #6db33f;
     box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.12);
     color: #fff;
 }
 
-button.accent {
+.send-button.accent {
     background-color: #6db33f;
     box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.12);
     color: #fff;

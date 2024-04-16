@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.Base64;
 import java.util.List;
@@ -40,26 +41,71 @@ public class UserController {
     }
 
 
+//    @PostMapping("/editUser")
+//    public ResponseEntity<UserResponse> editUser(@RequestParam("image") MultipartFile imageFile) {
+//        String userEmail = getEmailFromSecurityContext();
+//        UserResponse user = userService.getUserByUserEmail(userEmail);
+//
+//        // encoding the email to set as image name
+//        String encodedEmail = encodeString(user.getEmail());
+//
+//        // storing the image in resources/images directory
+//        try {
+//            String fileName = encodedEmail + ".jpg";
+//            File dest = new File("C:\\Users\\Asus\\Documents\\Workflow Management Tool\\WorkflowManagementTool\\workflow\\src\\main\\resources\\images\\" + fileName);
+//            imageFile.transferTo(dest);
+//            user.setImageUrl("images/" + fileName); // setting image URL in UserResponse
+//            return ResponseEntity.ok(user);
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+//        }
+//    }
+
     @PostMapping("/editUser")
     public ResponseEntity<UserResponse> editUser(@RequestParam("image") MultipartFile imageFile) {
         String userEmail = getEmailFromSecurityContext();
         UserResponse user = userService.getUserByUserEmail(userEmail);
 
-        // encoding the email to set as image name
         String encodedEmail = encodeString(user.getEmail());
+        String fileName = encodedEmail + ".jpg";
 
-        // storing the image in resources/images directory
+        // Storing the image in resources/images directory
+        String backendDestPath = "C:\\Users\\Asus\\Documents\\Workflow Management Tool\\WorkflowManagementTool\\workflow\\src\\main\\resources\\static\\images\\";
+        String frontendDestPath = "C:\\Users\\Asus\\Documents\\Workflow Management Tool\\WorkflowManagementTool\\ui\\workflow-react-app\\public\\images\\";
+
         try {
-            String fileName = encodedEmail + ".jpg";
-            File dest = new File("C:\\Users\\Asus\\Documents\\Workflow Management Tool\\WorkflowManagementTool\\workflow\\src\\main\\resources\\images\\" + fileName);
-            imageFile.transferTo(dest);
-            user.setImageUrl("images/" + fileName); // setting image URL in UserResponse
+            saveImage(imageFile, fileName, backendDestPath);
+            saveImage(imageFile, fileName, frontendDestPath);
+
+            user.setImageUrl("images/" + fileName); // Setting image URL in UserResponse
             return ResponseEntity.ok(user);
         } catch (IOException e) {
             e.printStackTrace();
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
+
+
+    private void saveImage(MultipartFile imageData, String fileName, String destPath) throws IOException {
+        try {
+            byte[] bytes = imageData.getBytes();
+            File dest = new File(destPath + fileName);
+
+            // If the file already exists, delete it
+            if (dest.exists()) {
+                dest.delete();
+            }
+
+            FileOutputStream fosDest = new FileOutputStream(dest);
+            fosDest.write(bytes);
+            fosDest.close();
+        } catch (Exception exception) {
+            System.out.println(exception);
+            throw new RuntimeException("Error converting to byte");
+        }
+    }
+
 
 
     private String encodeString(String text) {

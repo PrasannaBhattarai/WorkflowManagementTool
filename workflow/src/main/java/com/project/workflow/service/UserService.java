@@ -105,7 +105,7 @@ public class UserService {
     }
 
     // Method to encode a string using Base64
-    private String encodeString(String text) {
+    public String encodeString(String text) {
         return Base64.getEncoder().encodeToString(text.getBytes());
     }
 
@@ -115,13 +115,26 @@ public class UserService {
             byte[] bytes = imageData.getBytes();
             String fileName = encodedEmail + ".jpg";
             File dest = new File("C:\\Users\\Asus\\Documents\\Workflow Management Tool\\WorkflowManagementTool\\workflow\\src\\main\\resources\\static\\images\\" + fileName);
-            imageData.transferTo(dest);
+            File frontDest = new File("C:\\Users\\Asus\\Documents\\Workflow Management Tool\\WorkflowManagementTool\\ui\\workflow-react-app\\public\\images\\" + fileName);
 
-        }catch (Exception exception) {
+            // Write to the frontend destination
+            System.out.println("Attempting to read from file in: " + dest.getCanonicalPath());
+            FileOutputStream fosDest = new FileOutputStream(dest);
+            fosDest.write(bytes);
+            fosDest.close();
+
+            // Write to the backend destination
+            System.out.println("Attempting to read from file in: " + frontDest.getCanonicalPath());
+            FileOutputStream fosFrontDest = new FileOutputStream(frontDest);
+            fosFrontDest.write(bytes);
+            fosFrontDest.close();
+
+        } catch (Exception exception) {
             System.out.println(exception);
             throw new RuntimeException("Error converting to byte");
         }
     }
+
 
 
     public AuthenticationResponse authenticate(RegisterBody registerBody) throws Exception {

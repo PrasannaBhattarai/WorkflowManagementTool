@@ -1,5 +1,6 @@
 from django.http import JsonResponse
 from django.db import connection
+from django.core.mail import send_mail
 
 #project data analytics
 def chart_data(request):
@@ -137,3 +138,31 @@ def user_count(request):
         user_count = row[0] if row else 0
 
     return JsonResponse({'user_count': user_count})
+
+
+def send_email(request, user_email):
+    try:
+        send_mail(
+            'Workflow Management Tool Welcomes You!',
+            'Thank You for signing up to Workflow Management Tool, your account has now been verified and you can start working with us starting now!',
+            'workflowmanagementtool@gmail.com',  
+            [user_email],
+            fail_silently=False,
+        )
+        return JsonResponse({'success': True, 'message': 'Email sent successfully'})
+    except Exception as e:
+        return JsonResponse({'success': False, 'message': str(e)})
+    
+    
+def send_rejection_email(request, user_email):
+    try:
+        send_mail(
+            'Workflow Management Tool account Request Rejected.',
+            'We are sorry to inform you but your registration was failed due to invalid credentials. Please re-fill the form with valid details.',
+            'workflowmanagementtool@gmail.com',  
+            [user_email],  
+            fail_silently=False,
+        )
+        return JsonResponse({'success': True, 'message': 'Rejection email sent successfully'})
+    except Exception as e:
+        return JsonResponse({'success': False, 'message': str(e)})

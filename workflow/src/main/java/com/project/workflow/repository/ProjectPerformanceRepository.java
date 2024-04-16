@@ -14,6 +14,6 @@ public interface ProjectPerformanceRepository extends JpaRepository<ProjectPerfo
             "FROM User u " +
             "JOIN ProjectUser pu ON u.userId = pu.user.userId " +
             "WHERE pu.project.projectId = :projectId " +
-            "ORDER BY u.userRatings DESC")
+            "ORDER BY u.userRatings DESC LIMIT 3")
     List<Object[]> findTopPerformers(@Param("projectId") Long projectId);
 }
