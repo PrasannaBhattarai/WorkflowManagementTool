@@ -17,7 +17,7 @@ const Project = () => {
   const [user, setUser] = useState({ name: '' });
   const projectId = new URLSearchParams(location.search).get('id');
   const [projectRole, setProjectRole] = useState('');
-  const [activeComponent, setActiveComponent] = useState(null);
+  const [activeComponent, setActiveComponent] = useState('ToDo');
   const [notificationNumber, setNotificationNumber] = useState(0);
 
   useEffect(() => {
@@ -73,7 +73,7 @@ const Project = () => {
             Authorization: `Bearer ${token}`
           }
         });
-        setUser(response.data); // Set user data
+        setUser(response.data); // setting user data
       } catch (error) {
         console.error('Error fetching user:', error);
       }
@@ -101,22 +101,38 @@ const Project = () => {
     fetchProjects();
     fetchUser();
     fetchNotificationNumber();
-    fetchProjectUser(projectId)
+    fetchProjectUser(projectId);
+
+
+    const storedActiveComponent = localStorage.getItem('activeComponent');
+    if (storedActiveComponent) {
+      setActiveComponent(storedActiveComponent);
+    }
+
+    console.log("Project ID:", projectId);
   }, [projectId]);
 
 
   const handleLinkClick = (component) => {
     setActiveComponent(component);
+    localStorage.setItem('activeComponent', component);
   };
   
 
   const handleProjectClick = () => {
-    setShowProjects(!showProjects); // Toggle showProjects
+    setShowProjects(!showProjects); // toggle showProjects
   };
 
   const handleSubmit = (event) => {
     event.preventDefault();
   };
+
+
+  const handleLogout = () => {
+    localStorage.removeItem('token'); 
+    window.location.href = '/login'; 
+  };
+
 
   const renderActiveComponent = () => {
     switch (activeComponent) {
@@ -176,7 +192,7 @@ const Project = () => {
             )}
           </li>
         </ul>
-        <Link to="/" className="logout">
+        <Link to="/" className="logout" onClick={handleLogout}>
           <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-box-arrow-left" viewBox="0 0 16 16">
             <path fill-rule="evenodd" d="M6 12.5a.5.5 0 0 0 .5.5h8a.5.5 0 0 0 .5-.5v-9a.5.5 0 0 0-.5-.5h-8a.5.5 0 0 0-.5.5v2a.5.5 0 0 1-1 0v-2A1.5 1.5 0 0 1 6.5 2h8A1.5 1.5 0 0 1 16 3.5v9a1.5 1.5 0 0 1-1.5 1.5h-8A1.5 1.5 0 0 1 5 12.5v-2a.5.5 0 0 1 1 0z"/>
             <path fill-rule="evenodd" d="M.146 8.354a.5.5 0 0 1 0-.708l3-3a.5.5 0 1 1 .708.708L1.707 7.5H10.5a.5.5 0 0 1 0 1H1.707l2.147 2.146a.5.5 0 0 1-.708.708z"/>
@@ -204,7 +220,7 @@ const Project = () => {
         </div>
 
         {projectRole === 'Member' ? (
-        <div className='projectPage'>
+        <div className='projectPage' key={projectId}>
           <div className="top-panel">
             <a href="#" className="top-link" onClick={() => handleLinkClick('ToDo')}>
             <svg xmlns="http://www.w3.org/2000/svg" width="26" height="26" fill="currentColor" class="bi bi-list-task" viewBox="0 0 16 16">

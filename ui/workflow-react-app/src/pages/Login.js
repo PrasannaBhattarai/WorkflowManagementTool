@@ -3,7 +3,7 @@ import { Navigate, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import './css/Login.css';
 
-const Login = ({ setShowAuthAlert, setErrorCode, setIsAdminAuthenticated }) => {
+const Login = ({ setShowAuthAlert, setErrorCode, setIsAdminAuthenticated, setIsAuthenticated }) => {
   const [formData, setFormData] = useState({
     email: '',
     password: '',
@@ -18,10 +18,10 @@ const Login = ({ setShowAuthAlert, setErrorCode, setIsAdminAuthenticated }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    let response; // Define response variable outside try-catch block
+    let response;
 
     try {
-      // Try regular user authentication
+      // trying regular user authentication
       localStorage.removeItem('token');
 
       document.cookie = 'custom_cookie=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
@@ -31,9 +31,10 @@ const Login = ({ setShowAuthAlert, setErrorCode, setIsAdminAuthenticated }) => {
         formData
       );
 
-      // If regular user authentication succeeds, set token to localStorage and navigate to home
+      // If regular user authentication succeeds, sets token to localStorage and navigate to home
       const token = response.data.token;
       localStorage.setItem('token', token);
+      setIsAuthenticated(true);
       setIsAdminAuthenticated(false); 
       navigate('/home');
 
@@ -46,13 +47,14 @@ const Login = ({ setShowAuthAlert, setErrorCode, setIsAdminAuthenticated }) => {
             formData
           );
          
-          // If admin authentication succeeds, set token to cookie and navigate to home
+          // If admin authentication succeeds, sets token to cookie and navigate to home
           const token = response.data.token;
           document.cookie = `custom_cookie=${token}; path=/`;
           setIsAdminAuthenticated(true);
+          setIsAuthenticated(false);
           navigate('/chart');
         } catch (adminError) {
-          // If admin authentication also fails, show authentication error
+          // If admin authentication also fails, shows authentication error
           setErrorCode(403);
           setShowAuthAlert(true);
         }
@@ -101,7 +103,7 @@ const Login = ({ setShowAuthAlert, setErrorCode, setIsAdminAuthenticated }) => {
             </label>
             <br />
             <br/>
-            <button type="submit">LOGIN</button>
+            <button className="login"  type="submit">LOGIN</button>
             <h5>Don't Have Account? <a href="/register">Sign Up</a></h5>
           </form>
         </div>

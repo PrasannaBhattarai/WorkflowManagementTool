@@ -5,14 +5,22 @@ import ToDo from './member/Todo.js';
 import UpcomingTasks from './member/UpcomingTasks';
 import NoticeBoard from './NoticeBoard';
 import Chatroom from './Chat';
+import { Link, useLocation } from 'react-router-dom';
 
 const Guest = () => {
-
-  const [activeComponent, setActiveComponent] = useState(null);
+  const location = useLocation();
+  const projectId = new URLSearchParams(location.search).get('id');
+  const [activeComponent, setActiveComponent] = useState('ToDo');
 
   const handleLinkClick = (component) => {
     setActiveComponent(component);
   };
+
+  const handleLogout = () => {
+    localStorage.removeItem('token'); 
+    window.location.href = '/login'; 
+  };
+
 
   const renderActiveComponent = () => {
     switch (activeComponent) {
@@ -30,7 +38,7 @@ const Guest = () => {
   };
 
   return (
-    <div className="guest">
+    <div className="guest" key={projectId}>
       <div className='projectPage'>
           <div className="top-panel">
             <a href="#" className="top-link" onClick={() => handleLinkClick('ToDo')}>

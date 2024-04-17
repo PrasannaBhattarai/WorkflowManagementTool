@@ -12,7 +12,7 @@ import axios from 'axios';
 const Leader = () => {
   const location = useLocation();
   const projectId = new URLSearchParams(location.search).get('id');
-  const [activeComponent, setActiveComponent] = useState(null);
+  const [activeComponent, setActiveComponent] = useState('ToDo');
   const [project, setProject] = useState(null);
 
   useEffect(() => {
@@ -31,16 +31,27 @@ const Leader = () => {
           }
         });
         setProject(response.data);
+        if (!activeComponent) {
+          setActiveComponent('ToDo');
+        }
       } catch (error) {
         console.error('Error fetching project details:', error);
       }
     };
+    setActiveComponent('ToDo');
+
+    const storedActiveComponent = localStorage.getItem('activeComponent');
+    if (storedActiveComponent) {
+      setActiveComponent(storedActiveComponent);
+    }
+
 
     fetchProjectDetails();
   }, [projectId]);
 
   const handleLinkClick = (component) => {
     setActiveComponent(component);
+    localStorage.setItem('activeComponent', component);
   };
 
   const renderActiveComponent = () => {
@@ -61,7 +72,7 @@ const Leader = () => {
   };
 
   return (
-    <div className="leader">
+    <div className="leader" key={projectId}>
       <div className='projectPage'>
           <div className="top-panel">
             <a href="#" className="top-link" onClick={() => handleLinkClick('ToDo')}>
