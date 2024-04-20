@@ -1,6 +1,13 @@
 from django.http import JsonResponse
+import json
 from django.db import connection
 from django.core.mail import send_mail
+from .model import model
+from django.views.decorators.csrf import csrf_exempt
+from django.shortcuts import render
+from sklearn.feature_extraction.text import TfidfVectorizer
+import pandas as pd
+from sklearn.naive_bayes import MultinomialNB
 
 #project data analytics
 def chart_data(request):
@@ -166,3 +173,49 @@ def send_rejection_email(request, user_email):
         return JsonResponse({'success': True, 'message': 'Rejection email sent successfully'})
     except Exception as e:
         return JsonResponse({'success': False, 'message': str(e)})
+    
+
+
+# Load and preprocess the dataset
+df = pd.read_csv('prepared_dataset.csv')
+df = df.dropna()
+df['comment_full_text'] = df['comment_full_text'].astype(str)
+
+# Split the dataset into features (X) and labels (Y)
+X = df['comment_full_text']
+Y = df['task']
+
+# Initialize and fit the TF-IDF vectorizer
+tfidf_vectorizer = TfidfVectorizer()
+X_tfidf = tfidf_vectorizer.fit_transform(X)
+
+# Initialize and train the Multinomial Naive Bayes classifier
+model = MultinomialNB(alpha=1)
+model.fit(X_tfidf, Y)
+
+
+
+@csrf_exempt
+def classify_text(request):
+    if request.method == 'POST':
+        # Get the JSON data from the request body
+        try:
+            data = json.loads(request.body.decode('utf-8'))
+            text = data.get('text')
+        except json.JSONDecodeError:
+            return JsonResponse({'error': 'Invalid JSON data in request body'}, status=400)
+
+        if text is None:
+            return JsonResponse({'error': 'Text data is missing from request'}, status=400)
+
+        # Transform the input text using the TF-IDF vectorizer
+        input_tfidf = tfidf_vectorizer.transform([text])
+
+        # Make predictions using the trained model
+        prediction = model.predict(input_tfidf)
+
+        # Return the prediction result as JSON response
+        return JsonResponse({'is_task': bool(prediction[0])})
+    else:
+        # Return an error if the request method is not POST
+        return JsonResponse({'error': 'Only POST requests are allowed.'}, status=400)

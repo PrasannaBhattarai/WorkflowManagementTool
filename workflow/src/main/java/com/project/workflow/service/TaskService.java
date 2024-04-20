@@ -119,6 +119,24 @@ public class TaskService {
 
     }
 
+
+    public List<Task> getAllActiveForGuestInProject(Long projectId){
+        return taskRepository.getAllActiveForGuestInProject(projectId);
+    }
+
+
+    public List<Task> getAllDeadlineMissedTasksOrCompletedTasks(Long projectId){
+        return taskRepository.getAllDeadlineMissedTasksOrCompletedTasks(projectId);
+    }
+
+
+
+
+
+
+
+
+
     public void disableTask(Long taskId){
         taskRepository.markTaskAsCompleted(taskId);
     }

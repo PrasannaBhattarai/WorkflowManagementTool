@@ -71,8 +71,8 @@
   padding: 2px 6px;
   border-radius: 50%;
   position: relative;
-  left: -10px; /* Adjust as necessary */
-  top: -10px; /* Adjust to position the badge correctly */
+  left: -10px;
+  top: -10px; 
   font-weight: bold;
 }
 
@@ -184,9 +184,10 @@ label {
   font-weight: bold;
 }
 
-input[type="text"]
+.projectName
 {
-  margin-right: 65vh;
+  max-width: 80vh;
+  margin-right: 20vh;
   padding: 8px;
   border: 1px solid #ccc;
   border-radius: 4px;

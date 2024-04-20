@@ -4,6 +4,7 @@ import SockJS from 'sockjs-client';
 import { Client } from '@stomp/stompjs';
 import axios from 'axios';
 import './css/Chat.css';
+import Project from './leader/AssignTasks';
 
 const ChatApp = () => {
   const location = useLocation();
@@ -18,6 +19,8 @@ const ChatApp = () => {
   const [connected, setConnected] = useState(false);
   const [loading, setLoading] = useState(true); 
   const bottomRef = useRef(null);
+  const [isTask, setIsTask] = useState(false);
+  const [taskDescription, setTaskDescription] = useState('');
 
   const colors = [
     '#2196F3', '#32c787', '#00BCD4', '#ff5652',
@@ -153,6 +156,7 @@ const ChatApp = () => {
         content: messageInput,
         type: 'CHAT',
         token: token, // Include the token in the message payload
+        text: messageInput,
         projectId: projectId
       };
 
@@ -201,6 +205,37 @@ const ChatApp = () => {
     return colors[index];
   };
 
+  // function to handle message input change
+const handleMessageInputChange = (event) => {
+  setMessageInput(event.target.value);
+  setIsTask(false); // resets isTask flag when typing starts
+};
+
+// checks if the message is a task when message input length exceeds a certain threshold
+useEffect(() => {
+  const classifyMessage = async () => {
+    if (messageInput.length > 30) { 
+      try {
+        console.log("Message Input:", messageInput);
+        const response = await axios.post('http://127.0.0.1:8000/classify-text/', { text: messageInput });
+        console.log("Response from server:", response.data);
+        setIsTask(response.data.is_task);
+      } catch (error) {
+        console.error('Error classifying message:', error);
+      }
+    } else {
+      setIsTask(false);
+    }
+  };
+
+  classifyMessage();
+}, [messageInput]);
+
+const sendTaskDescription = (description) => {
+  setTaskDescription(description);
+  localStorage.setItem('taskDescription', description);
+};
+
   return (
     <div className="chat-container">
       {connecting && <div className="connecting">Connecting...</div>}
@@ -210,11 +245,19 @@ const ChatApp = () => {
             <p>Loading messages...</p>
           ) : (
             <>
+           {isTask && (
+                <div className="task-indicator">
+                    <h4>Would you like to make this message a task?</h4>
+                    <button className='makeTask' onClick={() => sendTaskDescription(messageInput)}>Yes</button>
+                </div>
+            )}
+
               <ul id="messageArea" ref={messageAreaRef}>{messageArea}</ul><div ref={bottomRef} />
               <form id="messageForm" onSubmit={sendMessage}>
                 <input type="text" id="message" placeholder="Type your message" value={messageInput} onChange={(e) => setMessageInput(e.target.value)} />
                 <button className='send-button' type="submit">Send</button>
               </form>
+              {isTask && <div>This message is classified as a task.</div>}
             </>
           )}
         </div>

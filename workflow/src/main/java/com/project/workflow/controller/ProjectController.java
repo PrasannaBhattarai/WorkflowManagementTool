@@ -1,9 +1,6 @@
 package com.project.workflow.controller;
 
-import com.project.workflow.models.Project;
-import com.project.workflow.models.ProjectInvitation;
-import com.project.workflow.models.ProjectNotification;
-import com.project.workflow.models.ProjectUser;
+import com.project.workflow.models.*;
 import com.project.workflow.models.dto.*;
 import com.project.workflow.models.response.*;
 import com.project.workflow.repository.ProjectRepository;
@@ -15,6 +12,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.parameters.P;
 import org.springframework.web.bind.annotation.*;
 
 import java.sql.Timestamp;
@@ -179,46 +177,56 @@ public class ProjectController {
     // executed together with /createProjectUser
     @PostMapping("/create")
     public ResponseEntity<Project> createProject(@RequestBody ProjectDTO projectDTO) {
-        Project project = new Project();
-        project.setProjectName(projectDTO.getProjectName());
-        project.setProjectDescription(projectDTO.getProjectDescription());
-        project.setStartDate(Timestamp.valueOf(LocalDateTime.now()));
-        project.setProjectStatus("ongoing");
-        project.setProjectType(projectDTO.getProjectType().equalsIgnoreCase("group") ? "group" : "solo");
-        Project projectSaved = projectRepository.save(project);
-        if (projectDTO.getProjectType().equalsIgnoreCase("group")){
-            System.out.println(projectDTO.getUsersId());
-            //invitation part
-            projectSaved.getProjectId();
+        try{
+            Project project = new Project();
+            project.setProjectName(projectDTO.getProjectName());
+            project.setProjectDescription(projectDTO.getProjectDescription());
+            project.setStartDate(Timestamp.valueOf(LocalDateTime.now()));
+            project.setProjectStatus("ongoing");
+            project.setProjectType(projectDTO.getProjectType().equalsIgnoreCase("group") ? "group" : "solo");
+            Project projectSaved = projectRepository.save(project);
+            if (projectDTO.getProjectType().equalsIgnoreCase("group")){
+                System.out.println(projectDTO.getUsersId());
+                //invitation part
+                projectSaved.getProjectId();
+            }
+
+            String userEmail = getEmailFromSecurityContext();
+
+            //add projectUser instance
+            projectService.createProjectUser(userEmail, projectSaved);
+
+            return new ResponseEntity<>(projectSaved,HttpStatus.CREATED);
+        } catch (Exception exception){
+            System.out.println(exception);
+            throw new RuntimeException("Error with creation of Project");
         }
-
-        String userEmail = getEmailFromSecurityContext();
-
-        //add projectUser instance
-        projectService.createProjectUser(userEmail, projectSaved);
-
-        return new ResponseEntity<>(projectSaved,HttpStatus.CREATED);
     }
 
 
     // executed together with /create
     @PostMapping("/createProjectUser")
     public ResponseEntity<ProjectUserResponse> addProjectUser(@RequestBody ProjectUserDTO projectUserDTO) {
-        ProjectUser createdProjectUser = projectUserService.addProjectUser(projectUserDTO);
-        UserResponse userResponse = new UserResponse();
-        userResponse.setUserId(createdProjectUser.getUser().getUserId());
-        userResponse.setFirstName(createdProjectUser.getUser().getFirstName());
-        userResponse.setLastName(createdProjectUser.getUser().getLastName());
-        userResponse.setEmail(createdProjectUser.getUser().getEmail());
-        userResponse.setUserName(createdProjectUser.getUser().getUserName());
+        try{
+            ProjectUser createdProjectUser = projectUserService.addProjectUser(projectUserDTO);
+            UserResponse userResponse = new UserResponse();
+            userResponse.setUserId(createdProjectUser.getUser().getUserId());
+            userResponse.setFirstName(createdProjectUser.getUser().getFirstName());
+            userResponse.setLastName(createdProjectUser.getUser().getLastName());
+            userResponse.setEmail(createdProjectUser.getUser().getEmail());
+            userResponse.setUserName(createdProjectUser.getUser().getUserName());
 
-        ProjectUserResponse projectUserResponse = new ProjectUserResponse();
-        projectUserResponse.setUser(userResponse);
-        projectUserResponse.setProject(createdProjectUser.getProject());
-        projectUserResponse.setUserType(createdProjectUser.getUserType());
-        projectUserResponse.setProjectRole(createdProjectUser.getProjectRole());
+            ProjectUserResponse projectUserResponse = new ProjectUserResponse();
+            projectUserResponse.setUser(userResponse);
+            projectUserResponse.setProject(createdProjectUser.getProject());
+            projectUserResponse.setUserType(createdProjectUser.getUserType());
+            projectUserResponse.setProjectRole(createdProjectUser.getProjectRole());
 
-        return new ResponseEntity<>(projectUserResponse, HttpStatus.CREATED);
+            return new ResponseEntity<>(projectUserResponse, HttpStatus.CREATED);
+        } catch (Exception exception){
+            System.out.println(exception);
+            throw new RuntimeException("Error with creation of Project");
+        }
     }
 
 
@@ -322,7 +330,6 @@ public class ProjectController {
             return new ResponseEntity<>("Failed to delete announcement", HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
-
 
 
 }

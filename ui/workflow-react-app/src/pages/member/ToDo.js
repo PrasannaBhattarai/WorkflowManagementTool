@@ -3,6 +3,7 @@ import './../css/ToDo.css';
 import TopPerformers from '../TopPerformers.js';
 import axios from 'axios';
 import { useLocation } from 'react-router-dom';
+import ErrorMessagePopup from './../../pages/error/ErrorMessagePopup.js';
 
 const ToDo = () => {
   const [activeToDoLists, setActiveToDoLists] = useState([]);
@@ -12,7 +13,8 @@ const ToDo = () => {
   const location = useLocation();
   const [description, setDescription] = useState('');
   const [projectRole, setProjectRole] = useState('');
-
+  const [clickedCompletedItems, setClickedCompletedItems] = useState([]);
+  const [showErrorMessage, setShowErrorMessage] = useState(false);
 
   useEffect(() => {
     fetchCompletedToDoLists();
@@ -110,6 +112,20 @@ const ToDo = () => {
       return null;
     }
   };
+
+  const handleCompletedItemClick = (toDoListId) => {
+    console.log('Clicked item ID:', toDoListId);
+    setClickedCompletedItems([...clickedCompletedItems, toDoListId]);
+  };
+
+   const handleRemove = (item) => {
+    if (projectRole !== 'Leader' && clickedCompletedItems.includes(item.toDoListId)) {
+      setShowErrorMessage(true); // Show error message for non-leaders trying to remove checked items
+      return;
+    }
+    console.log('Remove item:', item);
+    // Your remove logic here
+  };
   
   return (
     <div className='todo'>
@@ -164,9 +180,15 @@ const ToDo = () => {
                 checked
                 disabled
               />
-              <span className="completed">
-                {item.toDoItemDescription}
-              </span>
+          {projectRole === 'Leader' ? (
+            <span className={clickedCompletedItems.includes(item.toDoListId) ? 'completed hovered' : 'completed'} onClick={() => handleCompletedItemClick(item.toDoListId)}>
+              {item.toDoItemDescription}
+            </span>
+          ) : (
+            <span className="completed">
+              {item.toDoItemDescription}
+            </span>
+          )}
             </label>
           </div>
         ))}

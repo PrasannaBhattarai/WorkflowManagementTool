@@ -9,6 +9,7 @@ import ToDo from './member/Todo.js';
 import UpcomingTasks from './member/UpcomingTasks';
 import NoticeBoard from './NoticeBoard';
 import Chatroom from './Chat';
+import ErrorMessagePopup from './error/ErrorMessagePopup';
 
 const Project = () => {
   const location = useLocation();
@@ -19,6 +20,7 @@ const Project = () => {
   const [projectRole, setProjectRole] = useState('');
   const [activeComponent, setActiveComponent] = useState('ToDo');
   const [notificationNumber, setNotificationNumber] = useState(0);
+  const [errorMessage, setErrorMessage] = useState('');
 
   useEffect(() => {
     const fetchProjects = async () => {

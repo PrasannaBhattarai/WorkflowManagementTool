@@ -125,4 +125,15 @@ public class TaskController {
     }
 
 
+    @GetMapping("/guestTasks/active")
+    public ResponseEntity<List<Task>> getGuestActiveTasks(@RequestParam Long projectId) {
+        List<Task> activeTasks = taskService.getAllActiveForGuestInProject(projectId);
+        return new ResponseEntity<>(activeTasks, HttpStatus.OK);
+    }
+
+    @GetMapping("/guestTasks/inactive")
+    public ResponseEntity<List<Task>> getGuestTasks(@RequestParam Long projectId) {
+        List<Task> deadlineMissedOrCompletedTasks = taskService.getAllDeadlineMissedTasksOrCompletedTasks(projectId);
+        return new ResponseEntity<>(deadlineMissedOrCompletedTasks, HttpStatus.OK);
+    }
 }

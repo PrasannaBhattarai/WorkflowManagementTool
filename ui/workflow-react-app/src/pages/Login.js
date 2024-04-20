@@ -31,7 +31,7 @@ const Login = ({ setShowAuthAlert, setErrorCode, setIsAdminAuthenticated, setIsA
         formData
       );
 
-      // If regular user authentication succeeds, sets token to localStorage and navigate to home
+      // if regular user authentication succeeds, sets token to localStorage and navigates to home
       const token = response.data.token;
       localStorage.setItem('token', token);
       setIsAuthenticated(true);
@@ -47,14 +47,14 @@ const Login = ({ setShowAuthAlert, setErrorCode, setIsAdminAuthenticated, setIsA
             formData
           );
          
-          // If admin authentication succeeds, sets token to cookie and navigate to home
+          // if admin authentication succeeds, sets token to cookie and navigates to home
           const token = response.data.token;
           document.cookie = `custom_cookie=${token}; path=/`;
           setIsAdminAuthenticated(true);
           setIsAuthenticated(false);
           navigate('/chart');
         } catch (adminError) {
-          // If admin authentication also fails, shows authentication error
+          // if admin authentication also fails, shows authentication error
           setErrorCode(403);
           setShowAuthAlert(true);
         }

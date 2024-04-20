@@ -16,7 +16,7 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
-from .views import chart_data, project_type_data, project_status_data, project_count,  project_monthly_data, project_roles_data, top_users_data, user_count, send_email, send_rejection_email
+from .views import chart_data, project_type_data, project_status_data, project_count,  project_monthly_data, project_roles_data, top_users_data, user_count, send_email, send_rejection_email, classify_text
 
 
 urlpatterns = [
@@ -31,4 +31,5 @@ urlpatterns = [
     path('user-count/', user_count, name='user-count'),
     path('send-email/<str:user_email>/', send_email, name='send_email'),
     path('send-rejection-email/<str:user_email>/', send_rejection_email, name='send_rejection_email'),
+    path('classify-text/', classify_text, name='classify-text'),
 ]

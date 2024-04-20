@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import './css/Guest.css';
 import './css/Project.css';
 import ToDo from './member/Todo.js';
-import UpcomingTasks from './member/UpcomingTasks';
+import AllTasks from './guest/AllTasks.js';
 import NoticeBoard from './NoticeBoard';
 import Chatroom from './Chat';
 import { Link, useLocation } from 'react-router-dom';
@@ -27,7 +27,7 @@ const Guest = () => {
       case 'ToDo':
         return <ToDo />;
       case 'UpcomingTasks':
-        return <UpcomingTasks />;
+        return <AllTasks />;
       case 'NoticeBoard':
         return <NoticeBoard />;
       case 'Chatroom':

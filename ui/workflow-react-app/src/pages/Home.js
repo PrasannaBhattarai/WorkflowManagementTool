@@ -127,7 +127,21 @@ const Home = () => {
         projectType: 'group',
       });
     } catch (error) {
-      console.error('Error creating project:', error);
+      if (error.response) {
+        // request was made and the server responded with a status code
+        console.error('Server responded with error:', error.response.data);
+        // displays an error message to the user
+        alert('Failed to create project. Please try again later.');
+      } else if (error.request) {
+        // request was made but no response was received
+        console.error('No response received from server:', error.request);
+        alert('Failed to create project. Please check your internet connection.');
+      } else {
+        // setting up the request triggered an Error
+        console.error('Error setting up request:', error.message);
+        // error message to the user
+        alert('Failed to create project. An unexpected error occurred.');
+      }
     }
   };
 
@@ -211,6 +225,7 @@ const Home = () => {
             <div className="form-group">
               <label htmlFor="projectName">Project Name:</label>
               <input
+                className='projectName'
                 type="text"
                 id="projectName"
                 name="projectName"

@@ -10,10 +10,11 @@
     padding-bottom: 95px;
     padding-right: 25px;
     border: 1px solid #0e0d0d;
-    border-radius: 4px;
-    width: 300px;
-    height: 100px; 
+    border-radius: 2vh;
+    height: 250px; 
     z-index: 1000; 
+    width: 300px;
+
   }
   
   .authButton{

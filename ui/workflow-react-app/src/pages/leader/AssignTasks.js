@@ -3,6 +3,7 @@ import axios from 'axios';
 import './../css/AssignTasks.css';
 
 const AssignTasks = () => {
+    const [taskDescription, setTaskDescription] = useState('');
     const [showForm, setShowForm] = useState(false);
     const [formData, setFormData] = useState({
         taskDescription: '',
@@ -33,6 +34,16 @@ const AssignTasks = () => {
         };
 
         fetchAssignableUsers();
+        const storedTaskDescription = localStorage.getItem('taskDescription');
+        if (storedTaskDescription) {
+            setTaskDescription(storedTaskDescription);
+            setFormData({
+                ...formData,
+                taskDescription: storedTaskDescription // setting the task description in the form data
+            });
+            // clear the taskDescription from localStorage after it has been fetched
+            localStorage.removeItem('taskDescription');
+        }
     }, []);
 
     const handleFormSubmit = async (event) => {
@@ -93,6 +104,14 @@ const AssignTasks = () => {
         });
         setSelectedUsers([]);
     };
+
+
+    useEffect(() => {
+        const storedTaskDescription = localStorage.getItem('taskDescription');
+        if (storedTaskDescription) {
+          setTaskDescription(storedTaskDescription);
+        }
+      }, []);
 
     return (
         <div className="assign-tasks">
