@@ -139,6 +139,7 @@ a {
     height: calc(100% - 60px);
     max-height: 600px;
     position: relative;
+    border-radius: 2vh;
 }
 
 #chat-page ul {

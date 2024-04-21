@@ -7,6 +7,7 @@ public class UserDTO {
     private String lastName;
     private String userName;
     private float userRatings;
+    private String imageUrl;
 
     // Default constructor
     public UserDTO() {
@@ -60,5 +61,13 @@ public class UserDTO {
 
     public void setUserName(String userName) {
         this.userName = userName;
+    }
+
+    public String getImageUrl() {
+        return imageUrl;
+    }
+
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
     }
 }

@@ -3,7 +3,7 @@
     margin: 10px;
     border-radius: 3vh;
     padding: 2%;
-    max-height: 500px;
+    height: 77vh;
     overflow-y: auto;
 }
 
@@ -87,12 +87,13 @@
     align-items: center;
 }
 
-.user-card svg {
-    margin-right: 10px;
-    width: 40px;
-    height: 40px;
+.user-card img {
+    width: 47px;
+    height: 47px;
     border-radius: 50%;
+    margin-right: 10px; 
 }
+
 
 .user-card .user-details {
     flex-grow: 1;

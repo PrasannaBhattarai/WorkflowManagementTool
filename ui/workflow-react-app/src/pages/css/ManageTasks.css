@@ -25,11 +25,12 @@
     flex-direction: column; 
     flex: 1;
     overflow: auto;
+    max-height: 100vh;
 }
 
 .taskContent {
     padding: 20px;
     border: 1px solid #ccc;
     border-top: none;
-    height: 69vh;
+    height: 70vh;
 }

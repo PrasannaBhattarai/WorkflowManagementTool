@@ -10,10 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.sql.Timestamp;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 public class TaskService {
@@ -150,9 +147,15 @@ public class TaskService {
             member.setFirstName(user.getUser().getFirstName());
             member.setLastName(user.getUser().getLastName());
             member.setUserName(user.getProjectRole());
+            member.setImageUrl(encodeString(user.getUser().getEmail()));
             allMembers.add(member);
         }
         return allMembers;
+    }
+
+    private String encodeString(String imageUrl){
+        String image = Base64.getEncoder().encodeToString(imageUrl.getBytes());
+        return  "images/"+image+".jpg";
     }
 
     //member completed tasks to be rated by leader

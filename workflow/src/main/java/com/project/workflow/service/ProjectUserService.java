@@ -14,6 +14,7 @@ import com.project.workflow.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Base64;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
@@ -101,8 +102,13 @@ public class ProjectUserService {
 
     public List<PerformanceDTO> getPerformanceByProjectId(Long projectId) {
         return projectPerformanceRepository.findTopPerformers(projectId).stream()
-                .map(result -> new PerformanceDTO((String) result[0], (String) result[1], (Float) result[2]))
+                .map(result -> new PerformanceDTO((String) result[0], (String) result[1], (Float) result[2], encodeString((String) result[3])))
                 .collect(Collectors.toList());
+    }
+
+    private String encodeString(String imageUrl){
+        String image = Base64.getEncoder().encodeToString(imageUrl.getBytes());
+        return  "images/"+image+".jpg";
     }
 
 

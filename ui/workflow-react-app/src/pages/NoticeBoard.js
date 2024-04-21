@@ -1,14 +1,23 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import './../pages/css/NoticeBoard.css';
+import ErrorMessagePopup from './error/ErrorMessagePopup';
+import WarningPopup from './error/WarningPopup';
+import SuccessPopup from './error/SuccessPopup';
 
 const NoticeBoard = () => {
   const [projectRole, setProjectRole] = useState('');
   const [announcements, setAnnouncements] = useState([]);
-  const [editedAnnouncementId, setEditedAnnouncementId] = useState(null); // Track the announcement being edited
+  const [editedAnnouncementId, setEditedAnnouncementId] = useState(null); // tracks the announcement being edited
   const [editedAnnouncementText, setEditedAnnouncementText] = useState('');
   const [newAnnouncementText, setNewAnnouncementText] = useState('');
   const [isAddingAnnouncement, setIsAddingAnnouncement] = useState(false);
+  const [showError, setShowError] = useState(false);
+  const [errorMessage, setErrorMessage] = useState('');
+  const [showWarning, setShowWarning] = useState(false);
+  const [warningMessage, setWarningMessage] = useState('');
+  const [showSuccess, setShowSuccess] = useState(false);
+  const [successMessage, setSuccessMessage] = useState('');
 
   const fetchAnnouncements = async () => {
     try {
@@ -50,11 +59,11 @@ const NoticeBoard = () => {
     };
 
     fetchProjectUser();
-    fetchAnnouncements(); // Fetch announcements when component mounts
+    fetchAnnouncements(); // fetches announcements when component mounts
   }, []);
 
   const handleEdit = (announcementId, currentAnnouncement) => {
-    // Set the edited announcement ID and text for the announcement being edited
+    // sets the edited announcement ID and text for the announcement being edited
     setEditedAnnouncementId(announcementId);
     setEditedAnnouncementText(currentAnnouncement);
   };
@@ -67,24 +76,25 @@ const NoticeBoard = () => {
         return;
       }
       await axios.put(`http://localhost:8081/api/project/edit-announcement/${editedAnnouncementId}`, {
-        announcement: editedAnnouncementText // Send updated announcement text
+        announcement: editedAnnouncementText // sends updated announcement text
       }, {
         headers: {
           Authorization: `Bearer ${token}`
         }
       });
-      // Refresh component after successful update
+      // refreshes component after successful update
       fetchAnnouncements();
-      // Reset edited announcement state
+      // resets edited announcement state
       setEditedAnnouncementId(null);
       setEditedAnnouncementText('');
+      setShowWarning(true);
     } catch (error) {
       console.log(error);
     }
   };
 
   const handleCancel = () => {
-    // Reset edited announcement state when canceling
+    // resets edited announcement state when canceling
     setEditedAnnouncementId(null);
     setEditedAnnouncementText('');
   };
@@ -101,8 +111,10 @@ const NoticeBoard = () => {
           Authorization: `Bearer ${token}`
         }
       });
-      // Refresh component after successful delete
+      // refreshes component after successful delete
       fetchAnnouncements();
+      setErrorMessage('Announcement Deleted Successfully!');
+      setShowError(true);
     } catch (error) {
       console.log(error);
     }
@@ -127,6 +139,8 @@ const NoticeBoard = () => {
           Authorization: `Bearer ${token}`
         }
       });
+      setSuccessMessage('Announcement added successfully');
+      setShowSuccess(true);
       setIsAddingAnnouncement(false);
       setNewAnnouncementText('');
       fetchAnnouncements();
@@ -140,10 +154,23 @@ const NoticeBoard = () => {
     setNewAnnouncementText('');
   };
 
+  const handleErrorClose = () => {
+    setShowError(false);
+  };
+
+  const handleWarningClose = () => {
+    setShowWarning(false);
+  };
+
+  const handleSuccessClose = () => {
+    setShowSuccess(false);
+  };
+
   return (
     <div className="notice-board-container">
       <h2>Notice Board</h2>
-      {projectRole === 'Leader' && <p className="hi-leader">Hi Leader!</p>}
+      {projectRole === 'Leader' && <p className="hi-leader">Hello Leader!</p>}
+      {projectRole === 'Guest' && <p className="hi-guest">Hello Guest!</p>}
       {isAddingAnnouncement && (
         <div className="new-announcement-container">
           <textarea
@@ -167,9 +194,12 @@ const NoticeBoard = () => {
       {announcements.map((announcement) => (
         <div key={announcement.announcementId} className="announcement-card">
           <div>
+          <svg xmlns="http://www.w3.org/2000/svg" width="26" height="26" fill="currentColor" class="bi bi-envelope" viewBox="0 0 16 16">
+            <path d="M0 4a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2zm2-1a1 1 0 0 0-1 1v.217l7 4.2 7-4.2V4a1 1 0 0 0-1-1zm13 2.383-4.708 2.825L15 11.105zm-.034 6.876-5.64-3.471L8 9.583l-1.326-.795-5.64 3.47A1 1 0 0 0 2 13h12a1 1 0 0 0 .966-.741M1 11.105l4.708-2.897L1 5.383z"/>
+          </svg>
             <h3>{announcement.senderName} ({announcement.senderRole})</h3>
             <p>{announcement.announcement}</p>
-            <p>{announcement.announcedAt}</p>
+            <p className='datetime'>{announcement.announcedAt}</p>
           </div>
           {editedAnnouncementId === announcement.announcementId ? (
             <div className='main-container'>
@@ -183,6 +213,7 @@ const NoticeBoard = () => {
               </div>
             </div>
           ) : (
+            
             <div className='edit-button-container'>
               {projectRole === 'Leader' && (
                 <div className='button-container'>
@@ -198,6 +229,14 @@ const NoticeBoard = () => {
           )}
         </div>
       ))}
+      {showError && <ErrorMessagePopup message={errorMessage} onClose={handleErrorClose} />}
+      {showWarning && (
+          <WarningPopup
+            message="Edited Announcement Successfully!"
+            onClose={handleWarningClose}
+          />
+        )}
+        {showSuccess && <SuccessPopup message={successMessage} onClose={handleSuccessClose} />}
     </div>
   );
 };

@@ -19,7 +19,7 @@
 }
 
 .performer {
-    margin-bottom: 10px; 
+    margin-bottom: 3vh; 
 }
 
 
@@ -28,10 +28,13 @@
     
 }
 
-.pic svg{
-    margin: -15px;
-    margin-bottom: -30px;
-    margin-left: -30px;
+.pic img {
+    width: 47px;
+    height: 47px;
+    border-radius: 50%;
+    margin-right: 10px; 
+    margin-left: -4.5vh;
+    margin-bottom: -3.5vh;
 }
 
 .text{

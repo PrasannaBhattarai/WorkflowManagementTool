@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react';
 import './../css/Settings.css';
 import UserInvitePopup from './UserInvitePopup'; 
 import { Link, useLocation } from 'react-router-dom';
+import SuccessPopup from '../error/SuccessPopup';
+import WarningPopup from '../error/WarningPopup';
 
 const Settings = () => {
     const [formData, setFormData] = useState({
@@ -14,8 +16,13 @@ const Settings = () => {
     const [selectedUsers, setSelectedUsers] = useState([]);
     const [showPopup, setShowPopup] = useState(false);
     const [selectedUser, setSelectedUser] = useState(null);
-    const [submitSuccess, setSubmitSuccess] = useState(false); // State variable to trigger component refresh
+    const [submitSuccess, setSubmitSuccess] = useState(false);
     const location = useLocation();
+    const [showSuccess, setShowSuccess] = useState(false);
+    const [successMessage, setSuccessMessage] = useState('');
+    const [showWarning, setShowWarning] = useState(false);
+    const [warningMessage, setWarningMessage] = useState('');
+
 
     useEffect(() => {
         if (searchText) {
@@ -40,6 +47,7 @@ const Settings = () => {
             if (response.ok) {
                 const data = await response.json();
                 setUsers(data);
+                console.log(data);
             } else {
                 console.error('Failed to fetch users:', response.statusText);
             }
@@ -76,7 +84,7 @@ const Settings = () => {
     const handleInputChange = (event) => {
         const { name, value, type, checked } = event.target;
         
-        // If projectType is group, prevent changing to solo
+        // if projectType is group, prevents changing to solo
         if (name === 'projectType' && value === 'solo' && formData.projectType === 'group') {
             return;
         }
@@ -102,6 +110,7 @@ const Settings = () => {
     };
 
     const handleAddUser = (user) => {
+        setSuccessMessage(false);
         setSelectedUser(user);
         setShowPopup(true);
     };
@@ -114,8 +123,14 @@ const Settings = () => {
     const handleInviteUser = (payload) => {
         setSelectedUsers((prevUsers) => [...prevUsers, payload]);
         setShowPopup(false);
+        // shows warning message when user is added
+        showInviteWarning();
     };
     
+    const showInviteWarning = () => {
+        setShowWarning(true);
+        setWarningMessage('Save changes to make invitation permanent!');
+    };
 
     const handleSubmit = async (event) => {
         event.preventDefault();
@@ -136,7 +151,9 @@ const Settings = () => {
             });
             if (response.ok) {
                 console.log('Settings saved successfully');
-                setSubmitSuccess(true); // Update state variable to trigger component refresh
+                setSubmitSuccess(true);
+                setShowSuccess(true);
+                setSuccessMessage('Settings saved successfully');
             } else {
                 console.error('Failed to save settings:', response.statusText);
             }
@@ -207,9 +224,7 @@ const Settings = () => {
                                 </div>
                                 {users.map((user, index) => (
                                     <div className="user-card" key={index}>
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-person-fill" viewBox="0 0 16 16">
-                                            <path d="M3 14s-1 0-1-1 1-4 6-4 6 3 6 4-1 1-1 1zm5-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6"/>
-                                        </svg>
+                                         <img src={user.userName} width="47" height="47" />
                                         <span className='name'>{user.firstName} {user.lastName}</span>
                                         <span className='ratings'> User Ratings: {user.userRatings}</span>
                                         <button onClick={() => handleAddUser(user)}>Add User</button>
@@ -225,10 +240,9 @@ const Settings = () => {
                 </center>
                 <br/>
                 <br/>
+                <br/>
+                <br/>
                 <h2>Terminate Project?</h2>
-                <br/>
-                <br/>
-                <br/>
                 <center>
                     <button type="submit" className="custom-button">Close Project</button>
                 </center>
@@ -238,6 +252,15 @@ const Settings = () => {
                     userDetails={selectedUser}
                     onCancel={handlePopupClose}
                     onInvite={handleInviteUser}
+                />
+            )}
+            {showSuccess && (
+                <SuccessPopup message={successMessage} onClose={() => setShowSuccess(false)} />
+            )}
+            {showWarning && (
+                <WarningPopup
+                    message={warningMessage}
+                    onClose={() => setShowWarning(false)}
                 />
             )}
         </div>

@@ -13,7 +13,7 @@ const Notifications = () => {
   const [showProjects, setShowProjects] = useState(false);
   const [user, setUser] = useState({ name: '' });
   const [notificationNumber, setNotificationNumber] = useState(0);
-  const [activePanel, setActivePanel] = useState('Notifications');
+  const [activePanel, setActivePanel] = useState('ActiveNotifications');
 
   useEffect(() => {
     const fetchData = async () => {

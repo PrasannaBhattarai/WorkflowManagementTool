@@ -10,7 +10,7 @@ import java.util.List;
 
 public interface ProjectPerformanceRepository extends JpaRepository<ProjectPerformance, Long> {
 
-    @Query("SELECT u.firstName, u.lastName, u.userRatings " +
+    @Query("SELECT u.firstName, u.lastName, u.userRatings, u.email " +
             "FROM User u " +
             "JOIN ProjectUser pu ON u.userId = pu.user.userId " +
             "WHERE pu.project.projectId = :projectId " +

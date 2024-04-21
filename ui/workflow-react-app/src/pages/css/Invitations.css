@@ -1,6 +1,8 @@
 .page{
   border: none;
   background-color: #ebe7e7;
+  max-height: 85vh;
+  overflow: auto;
 }
 
 .invitations {
@@ -16,6 +18,12 @@
     margin-bottom: 10px;
     width: calc(100% - 20px);
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    display: flex;
+  }
+
+  .info{
+    margin-left: 10px;
+    margin-top: -5px;
   }
   
   .notification-box p {

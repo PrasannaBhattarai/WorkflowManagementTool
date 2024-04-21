@@ -1,5 +1,5 @@
 .rating-card {
-    background-color: rgb(199, 195, 195);
+    background-color: rgb(233, 232, 232);
     flex: 1;
     overflow-y: auto;
     border-radius: 3vh;
@@ -14,14 +14,46 @@
     padding: 20px;
     border-radius: 3vh;
     display: flex;
-    flex-direction: column;
+}
+
+.card-container .imgs{
+    margin-right: 20px;
+    margin-top: 15px;
+}
+
+.card-containers {
+    margin-bottom: 20px;
+    background-color: white;
+    padding: 20px;
+    border-radius: 3vh;
+    display: flex;
+}
+
+.card-containers .task-info{
+    margin-left: 20px;
+    margin-top: -15px;
+}
+
+.labelsInfo{
+    font-weight: bold;
+}
+
+.task-info p{
+    word-wrap: break-word;
+    overflow-wrap: break-word;
 }
 
 .custom-submit {
     align-self: flex-end;
     max-width: 15%; 
     border-radius: 1vh;
-    margin-top: -5%;
+    margin-left: 15vh;
+}
+
+.custom-remove{
+    max-width: 25vh;
+    background-color: red;
+    margin-left: 60vh;
 }
 
 .input-field, .custom-submit {
@@ -31,7 +63,10 @@
 
 .input-field {
     border-radius: 1vh;
-    margin-bottom: 10px;
+    max-width: 10vh;
+    max-height: 5vh;
+    margin-top: -10px;
+    margin-left: 10px;
 }
 
 .blue {
@@ -48,4 +83,9 @@
 
 .yellow{
     color: rgb(137, 119, 0);
+}
+
+.msg{
+    color: red;
+    margin-left: 10px;
 }

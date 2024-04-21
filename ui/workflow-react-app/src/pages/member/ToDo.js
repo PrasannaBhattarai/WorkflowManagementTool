@@ -4,6 +4,7 @@ import TopPerformers from '../TopPerformers.js';
 import axios from 'axios';
 import { useLocation } from 'react-router-dom';
 import ErrorMessagePopup from './../../pages/error/ErrorMessagePopup.js';
+import SuccessPopup from '../error/SuccessPopup.js';
 
 const ToDo = () => {
   const [activeToDoLists, setActiveToDoLists] = useState([]);
@@ -14,7 +15,10 @@ const ToDo = () => {
   const [description, setDescription] = useState('');
   const [projectRole, setProjectRole] = useState('');
   const [clickedCompletedItems, setClickedCompletedItems] = useState([]);
-  const [showErrorMessage, setShowErrorMessage] = useState(false);
+  const [showSuccess, setShowSuccess] = useState(false);
+  const [showError, setShowError] = useState(false);
+  const [successMessage, setSuccessMessage] = useState('');
+  const [errorMessage, setErrorMessage] = useState('');
 
   useEffect(() => {
     fetchCompletedToDoLists();
@@ -120,11 +124,22 @@ const ToDo = () => {
 
    const handleRemove = (item) => {
     if (projectRole !== 'Leader' && clickedCompletedItems.includes(item.toDoListId)) {
-      setShowErrorMessage(true); // Show error message for non-leaders trying to remove checked items
+      setErrorMessage('Only Leader Can Remove To-Do Item!');
+      setShowError(true);
       return;
     }
-    console.log('Remove item:', item);
-    // Your remove logic here
+    setSuccessMessage("To-Do Item Removed Successfully!");
+    setShowSuccess(true);
+    console.log('Remove item:', item.toDoListId);
+    
+  };
+
+  const handleSuccessClose = () => {
+    setShowSuccess(false);
+  };
+
+  const handleErrorClose = () => {
+    setShowError(false);
   };
   
   return (
@@ -181,7 +196,7 @@ const ToDo = () => {
                 disabled
               />
           {projectRole === 'Leader' ? (
-            <span className={clickedCompletedItems.includes(item.toDoListId) ? 'completed hovered' : 'completed'} onClick={() => handleCompletedItemClick(item.toDoListId)}>
+            <span className={clickedCompletedItems.includes(item.toDoListId) ? 'completed hovered' : 'completed'} onClick={() => handleRemove(item)}>
               {item.toDoItemDescription}
             </span>
           ) : (
@@ -209,6 +224,8 @@ const ToDo = () => {
         </button>
       </div>
     )}
+         {showSuccess && <SuccessPopup message={successMessage} onClose={handleSuccessClose} />}
+      {showError && <ErrorMessagePopup message={errorMessage} onClose={handleErrorClose} />}
   </div>
 );
 };

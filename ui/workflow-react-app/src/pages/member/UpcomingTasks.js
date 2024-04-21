@@ -3,6 +3,8 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import './../css/Tasks.css';
 import './../css/Performers.css';
+import ErrorMessagePopup from '../error/ErrorMessagePopup.js';
+import SuccessPopup from '../error/SuccessPopup.js';
 
 const UpcomingTasks = () => {
   const [activeTasks, setActiveTasks] = useState([]);
@@ -14,6 +16,10 @@ const UpcomingTasks = () => {
     taskDeadline: '',
     taskPriority: 'Medium' // default priority
   });
+  const [showSuccess, setShowSuccess] = useState(false);
+  const [showError, setShowError] = useState(false);
+  const [successMessage, setSuccessMessage] = useState('');
+  const [errorMessage, setErrorMessage] = useState('');
 
   useEffect(() => {
     const fetchTasks = async () => {
@@ -58,6 +64,9 @@ const UpcomingTasks = () => {
           'Content-Type': 'application/json'
         }
       });
+
+      setSuccessMessage('Task completed successfully');
+      setShowSuccess(true);
 
       setActiveTasks(prevActiveTasks => 
         prevActiveTasks.map(task => 
@@ -136,6 +145,26 @@ const UpcomingTasks = () => {
     });
   };
 
+  const handleRemoveButtonClick = (taskId, role) => {
+    if (role === 'Leader') {
+      setErrorMessage('Task removed successfully');
+      setShowError(true);
+      console.log(taskId);
+    } else {
+      setErrorMessage('Only leaders can remove tasks');
+      setShowError(true);
+    }
+  };
+
+  const handleSuccessClose = () => {
+    setShowSuccess(false);
+  };
+
+  const handleErrorClose = () => {
+    setShowError(false);
+  };
+  
+
   return (
     <div className='tasks'>
        {showForm ? (
@@ -187,7 +216,7 @@ const UpcomingTasks = () => {
                 </tr>
               ) : (
                 activeTasks.map(task => (
-                  <tr key={task.taskId}>
+                  <tr className='active-task' key={task.taskId} onClick={() => handleCheckboxClick(task.taskId)}>
                     <td>
                       <center>
                         <input
@@ -207,7 +236,7 @@ const UpcomingTasks = () => {
                 ))
               )}
               {nonActiveTasks.map(task => (
-                <tr key={task.taskId} className="non-active-task">
+                <tr key={task.taskId} className="non-active-task" onClick={() => handleRemoveButtonClick(task.taskId, projectRole)}>
                   <td><center><input type="checkbox" checked disabled /></center></td>
                   <td><s>{task.taskDescription}</s></td>
                   <td><s>{task.taskPriority}</s></td>
@@ -232,6 +261,8 @@ const UpcomingTasks = () => {
         </button>
       </div>
     )}
+     {showSuccess && <SuccessPopup message={successMessage} onClose={handleSuccessClose} />}
+    {showError && <ErrorMessagePopup message={errorMessage} onClose={handleErrorClose} />}
     </div>
   );
 };

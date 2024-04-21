@@ -218,13 +218,17 @@ public class UserService {
             List<User> users = userRepository.findByEmailContaining(text, "admin@gmail.com", userIds);
             if (users != null) {
                 return users.stream()
-                        .map(user -> new UserDTO(user.getEmail(), user.getFirstName(), user.getLastName(), user.getUserName(), user.getUserRatings()))
+                        .map(user -> new UserDTO(user.getEmail(), user.getFirstName(), user.getLastName(), encodeStringImage(user.getEmail()), user.getUserRatings()))
                         .collect(Collectors.toList());
             }
         }
         return Collections.emptyList();
     }
 
+    private String encodeStringImage (String imageUrl){
+        String image = Base64.getEncoder().encodeToString(imageUrl.getBytes());
+        return  "images/"+image+".jpg";
+    }
 
 
     public UserResponse getUserByUserEmail(String email) {

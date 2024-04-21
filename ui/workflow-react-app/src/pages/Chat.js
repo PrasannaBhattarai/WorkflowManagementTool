@@ -155,7 +155,7 @@ const ChatApp = () => {
         sender: username,
         content: messageInput,
         type: 'CHAT',
-        token: token, // Include the token in the message payload
+        token: token, // including the token in the message payload
         text: messageInput,
         projectId: projectId
       };
@@ -214,7 +214,7 @@ const handleMessageInputChange = (event) => {
 // checks if the message is a task when message input length exceeds a certain threshold
 useEffect(() => {
   const classifyMessage = async () => {
-    if (messageInput.length > 30) { 
+    if (messageInput.length > 50) { 
       try {
         console.log("Message Input:", messageInput);
         const response = await axios.post('http://127.0.0.1:8000/classify-text/', { text: messageInput });
@@ -257,7 +257,7 @@ const sendTaskDescription = (description) => {
                 <input type="text" id="message" placeholder="Type your message" value={messageInput} onChange={(e) => setMessageInput(e.target.value)} />
                 <button className='send-button' type="submit">Send</button>
               </form>
-              {isTask && <div>This message is classified as a task.</div>}
+              {isTask && <div>Would You Like to Make This Message A Task?</div>}
             </>
           )}
         </div>

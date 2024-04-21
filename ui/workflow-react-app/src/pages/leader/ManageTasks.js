@@ -37,7 +37,7 @@ const ManageTasks = () => {
     }, [projectId]);
 
     useEffect(() => {
-        // Set active component based on project type
+        // sets active component based on project type
         if (project && project.projectType === 'group') {
             setActiveComponent('SelfTasks');
         } else {
