@@ -1,5 +1,3 @@
-// ProjectCount.js
-
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 
@@ -23,7 +21,7 @@ const ProjectCount = () => {
         <div>
             <h2>Project Count</h2>
             {count !== null ? (
-                <p>Total projects: {count}</p>
+                <p>Total projects: <span className='big-count'>{count}</span></p>
             ) : (
                 <p>Loading...</p>
             )}

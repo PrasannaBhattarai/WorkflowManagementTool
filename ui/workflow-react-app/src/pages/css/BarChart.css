@@ -65,7 +65,7 @@
 }
 
 .chart-count {
-    background-color: rgb(255, 255, 255);
+    background-color: rgb(210, 245, 210);
     text-align: center;
     margin: auto;
     padding: 20px 100px;
@@ -83,7 +83,7 @@
     flex: 1;
     margin-right: 20px;
     margin-bottom: 20px;
-    background-color: rgb(255, 255, 255);
+    background-color: rgb(215, 235, 241);
     text-align: center;
     max-height: 65vh;
     padding-bottom: 20px;
@@ -94,7 +94,7 @@
     flex: 1;
     margin-right: 20px;
     margin-bottom: 20px;
-    background-color: rgb(255, 255, 255);
+    background-color: rgb(245, 241, 221);
     text-align: center;
     max-height: 55vh;
     border-radius: 2vh;
@@ -116,4 +116,14 @@
     bottom: 5vh; 
     left: 4.5vh;
     width: 30vh;
+}
+
+.navigation-links svg{
+    margin-right: 3vh;
+    margin-bottom: -1vh;
+}
+
+.big-count{
+    font-weight: bold;
+    font-size: 50px;
 }

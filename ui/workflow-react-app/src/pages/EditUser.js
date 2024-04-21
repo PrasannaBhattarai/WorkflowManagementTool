@@ -4,6 +4,7 @@ import axios from 'axios';
 import './css/EditUser.css';
 import './css/Home.css';
 import ErrorMessagePopup from './error/ErrorMessagePopup';
+import SuccessMessagePopup from './error/SuccessPopup';
 
 const EditUser = () => {
   const location = useLocation();
@@ -17,6 +18,8 @@ const EditUser = () => {
   const [firstName, setFirstName] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [errorMessage, setErrorMessage] = useState(null);
+  const [showSuccessMessage, setShowSuccessMessage] = useState(false);
+  const [successMessage, setSuccessMessage] = useState('');
 
   useEffect(() => {
     const fetchProjects = async () => {
@@ -152,9 +155,14 @@ const EditUser = () => {
           },
         });
       }
+
+      setShowSuccessMessage(true);
+      setSuccessMessage('User details updated successfully!');
   
       // refreshes component
-      window.location.reload();
+      setTimeout(() => {
+        window.location.reload();
+      }, 2000);
     } catch (error) {
       setErrorMessage('Error submitting form: ' + error.message);
     }
@@ -290,6 +298,12 @@ const EditUser = () => {
         </div>
       </div>
       <br/><br/>
+      {showSuccessMessage && (
+        <SuccessMessagePopup
+          message={successMessage} // Pass the success message as prop
+          onClose={() => setShowSuccessMessage(false)}
+        />
+      )}
       {errorMessage && (
     <ErrorMessagePopup message={errorMessage} onClose={() => setErrorMessage(null)} />
   )}

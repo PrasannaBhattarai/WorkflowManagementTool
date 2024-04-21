@@ -136,4 +136,15 @@ public class TaskController {
         List<Task> deadlineMissedOrCompletedTasks = taskService.getAllDeadlineMissedTasksOrCompletedTasks(projectId);
         return new ResponseEntity<>(deadlineMissedOrCompletedTasks, HttpStatus.OK);
     }
+
+    @DeleteMapping("/project/{projectId}/{taskId}")
+    public void deleteTask(@PathVariable Long projectId, @PathVariable Long taskId) {
+        try {
+            taskService.deleteTask(projectId, taskId);
+        } catch (Exception e) {
+            System.out.println(e);
+            throw new RuntimeException("Failed Delete Task");
+        }
+    }
+
 }

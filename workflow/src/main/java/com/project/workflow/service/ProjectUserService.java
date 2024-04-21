@@ -52,7 +52,7 @@ public class ProjectUserService {
         System.out.println(userOptional);
         if (userOptional.isPresent()) {
             Long userId = userOptional.get().getUserId();
-            List<ProjectUser> projectUsers = projectUserRepository.findByUserUserId(userId);
+            List<ProjectUser> projectUsers = projectUserRepository.findOpenProjects(userId);
             return projectUsers.stream()
                     .map(ProjectUser::getProject)
                     .collect(Collectors.toList());

@@ -122,17 +122,32 @@ const ToDo = () => {
     setClickedCompletedItems([...clickedCompletedItems, toDoListId]);
   };
 
-   const handleRemove = (item) => {
-    if (projectRole !== 'Leader' && clickedCompletedItems.includes(item.toDoListId)) {
-      setErrorMessage('Only Leader Can Remove To-Do Item!');
-      setShowError(true);
-      return;
+  const handleRemove = async (item) => {
+    try {
+        if (projectRole !== 'Leader' && clickedCompletedItems.includes(item.toDoListId)) {
+            setErrorMessage('Only Leader Can Remove To-Do Item!');
+            setShowError(true);
+            return;
+        }
+        const projectId = new URLSearchParams(window.location.search).get("id");
+        const token = localStorage.getItem('token');
+        console.log('Remove item:', item.toDoListId, projectId);
+        await axios.delete(`http://localhost:8081/api/todo/project/${projectId}/${item.toDoListId}`, {
+            headers: {
+                Authorization: `Bearer ${token}`
+            }
+        });
+        fetchActiveToDoLists();
+        setSuccessMessage("To-Do Item Removed Successfully!");
+        setShowSuccess(true);
+        setTimeout(() => {
+          window.location.reload();
+        }, 2000);
+    } catch (error) {
+        setErrorMessage("Failed to delete to-do item");
+        setShowError(true);
     }
-    setSuccessMessage("To-Do Item Removed Successfully!");
-    setShowSuccess(true);
-    console.log('Remove item:', item.toDoListId);
-    
-  };
+};
 
   const handleSuccessClose = () => {
     setShowSuccess(false);

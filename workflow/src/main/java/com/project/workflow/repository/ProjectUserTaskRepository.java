@@ -27,4 +27,8 @@ public interface ProjectUserTaskRepository extends JpaRepository<ProjectUserTask
     @Query("UPDATE ProjectUserTask pu SET pu.taskRating = :rating WHERE pu.project.projectId = :projectId AND pu.task.taskId = :taskId AND pu.assignedUser.userId = :userId")
     void findByProjectProjectId(@Param("projectId") Long projectId, @Param("taskId") Long taskId, @Param("userId") Long userId, @Param("rating") double rating);
 
+    @Modifying
+    @Transactional
+    @Query("DELETE FROM ProjectUserTask t WHERE t.task.taskId = :taskId AND t.project.projectId = :projectId")
+    void deleteByProjectAndTaskId(@Param("taskId") Long taskId, @Param("projectId") Long projectId);
 }

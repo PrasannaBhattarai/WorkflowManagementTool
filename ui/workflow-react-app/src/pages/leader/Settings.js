@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import './../css/Settings.css';
 import UserInvitePopup from './UserInvitePopup'; 
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import SuccessPopup from '../error/SuccessPopup';
 import WarningPopup from '../error/WarningPopup';
 
@@ -11,6 +11,7 @@ const Settings = () => {
         allowGuestAnnouncements: true,
         allowSelfTaskAssignments: false,
     });
+    const navigate = useNavigate();
     const [users, setUsers] = useState([]);
     const [searchText, setSearchText] = useState('');
     const [selectedUsers, setSelectedUsers] = useState([]);
@@ -22,7 +23,15 @@ const Settings = () => {
     const [successMessage, setSuccessMessage] = useState('');
     const [showWarning, setShowWarning] = useState(false);
     const [warningMessage, setWarningMessage] = useState('');
+    const [showCloseConfirmation, setShowCloseConfirmation] = useState(false);
 
+    const handleConfirmClose = () => {
+        setShowCloseConfirmation(true);
+    };
+
+    const handleCloseConfirmation = () => {
+        setShowCloseConfirmation(false);
+    };
 
     useEffect(() => {
         if (searchText) {
@@ -162,10 +171,35 @@ const Settings = () => {
         }
     };
 
+    const handleConfirmCloseProject = async () => {
+        try {
+            const projectId = new URLSearchParams(location.search).get('id');
+            const response = await fetch(`http://localhost:8081/api/project/close/${projectId}`, {
+                method: 'PUT',
+                headers: {
+                    'Authorization': `Bearer ${localStorage.getItem('token')}`,
+                    'Content-Type': 'application/json'
+                }
+            });
+            if (response.ok) {
+                setShowWarning(true);
+                setWarningMessage('Project closed successfully!');
+                setTimeout(() => {
+                    navigate('/home');
+                  }, 2000);
+            } else {
+                console.error('Failed to close project:', response.statusText);
+            }
+        } catch (error) {
+            console.error('Error closing project:', error);
+        }
+        setShowCloseConfirmation(false);
+    };
+
     return (
         <div className="edit-project">
             <form onSubmit={handleSubmit}>
-                <label htmlFor="setProjectType">Set Project Type:</label>
+                <label htmlFor="setProjectType">Set Project Type:</label><span className='msg'>*Once changed to Group, cannot revert to Solo Project</span>
                 <select
                     id="setProjectType"
                     name="projectType"
@@ -199,7 +233,7 @@ const Settings = () => {
                         </label>
                         <br/>
                         <br/>
-                        <label>Add Team Members:</label>
+                        <label>Add Team Members:</label><span className='msg'>*To make changes permanent, please save changes</span>
                         <div className="assignable-users">
                             <div className="assignable-users-list">
                                 <div className="search-bar">
@@ -227,7 +261,7 @@ const Settings = () => {
                                          <img src={user.userName} width="47" height="47" />
                                         <span className='name'>{user.firstName} {user.lastName}</span>
                                         <span className='ratings'> User Ratings: {user.userRatings}</span>
-                                        <button onClick={() => handleAddUser(user)}>Add User</button>
+                                        <button className='add-button-user' onClick={() => handleAddUser(user)}>Add User</button>
                                     </div>
                                 ))}
                             </div>
@@ -244,7 +278,7 @@ const Settings = () => {
                 <br/>
                 <h2>Terminate Project?</h2>
                 <center>
-                    <button type="submit" className="custom-button">Close Project</button>
+                    <button type="button" className="custom-button" onClick={handleConfirmClose}>Close Project</button>
                 </center>
             </form>
             {showPopup && (
@@ -253,6 +287,14 @@ const Settings = () => {
                     onCancel={handlePopupClose}
                     onInvite={handleInviteUser}
                 />
+            )}
+            {showCloseConfirmation && (
+                <div className="confirmation-popup">
+                    <p>Are you sure you want to close the project?</p>
+                    <button className='close-button-confirm' onClick={handleConfirmCloseProject}>Confirm</button>
+                    <br></br>
+                    <button className='close-button-cancel' onClick={handleCloseConfirmation}>Cancel</button>
+                </div>
             )}
             {showSuccess && (
                 <SuccessPopup message={successMessage} onClose={() => setShowSuccess(false)} />

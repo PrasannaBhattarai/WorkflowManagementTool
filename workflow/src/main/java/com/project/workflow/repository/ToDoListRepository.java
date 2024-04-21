@@ -33,4 +33,9 @@ public interface ToDoListRepository extends JpaRepository<ToDoList, Long> {
     @Query("UPDATE ToDoList t SET t.toDoListStatus = 'completed' WHERE t.toDoListId = :toDoItemId")
     void markToDoListAsCompleted(@Param("toDoItemId") Long toDoItemId);
 
+    @Transactional
+    @Modifying
+    @Query("DELETE FROM ToDoList t WHERE t.toDoListId = :todoListId")
+    void deleteToDoById(Long todoListId);
+
 }

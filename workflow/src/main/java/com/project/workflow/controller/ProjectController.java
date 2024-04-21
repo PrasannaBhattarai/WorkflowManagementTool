@@ -83,8 +83,6 @@ public class ProjectController {
     }
 
 
-
-
     @GetMapping("/getNotifications")
     public List<NotificationResponse> getNotification(){
         try{
@@ -331,5 +329,15 @@ public class ProjectController {
         }
     }
 
+    @PutMapping("/close/{projectId}")
+    public ResponseEntity<HttpStatus> closeProject(@PathVariable Long projectId) {
+        try{
+            projectService.closeProject(projectId);
+            return ResponseEntity.ok().build();
+        }catch (Exception exception){
+            System.out.println(exception);
+            throw new RuntimeException("Error closing project!");
+        }
+    }
 
 }

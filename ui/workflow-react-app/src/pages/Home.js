@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import axios from 'axios';
 import './css/Home.css';
+import SuccessPopup from './error/SuccessPopup';
 
 const Home = () => {
   const location = useLocation();
@@ -14,7 +15,8 @@ const Home = () => {
     projectDescription: '',
     projectType: 'group',
   });
-
+  const [showSuccessMessage, setShowSuccessMessage] = useState(false);
+  const [successMessage, setSuccessMessage] = useState('');
   const [notificationNumber, setNotificationNumber] = useState(0);
 
   useEffect(() => {
@@ -126,6 +128,8 @@ const Home = () => {
         projectDescription: '',
         projectType: 'group',
       });
+      setShowSuccessMessage(true);
+      setSuccessMessage('Project created successfully!');
     } catch (error) {
       if (error.response) {
         // request was made and the server responded with a status code
@@ -277,7 +281,12 @@ const Home = () => {
         </div>
       </div>
       <br/><br/>
-     
+      {showSuccessMessage && (
+      <SuccessPopup
+        message="Project created successfully!"
+        onClose={() => setShowSuccessMessage(false)}
+      />
+    )}
 
     </div>
   );

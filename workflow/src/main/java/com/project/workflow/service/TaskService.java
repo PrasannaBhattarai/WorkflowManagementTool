@@ -270,4 +270,9 @@ public class TaskService {
             notificationService.createRatedNotification(assignedUser,projectId);
         }
     }
+
+    public void deleteTask(Long projectId, Long taskId) {
+        projectUserTaskRepository.deleteByProjectAndTaskId(taskId,projectId);
+        taskRepository.deleteByIdAndProjectId(taskId);
+    }
 }

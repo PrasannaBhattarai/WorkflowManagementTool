@@ -20,6 +20,7 @@ const UpcomingTasks = () => {
   const [showError, setShowError] = useState(false);
   const [successMessage, setSuccessMessage] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
+  const [searchSettings, setSearchSettings] = useState({}); 
 
   useEffect(() => {
     const fetchTasks = async () => {
@@ -45,6 +46,14 @@ const UpcomingTasks = () => {
 
         const projectRole = await fetchProjectUser(projectId);
         setProjectRole(projectRole);
+
+        const settingsResponse = await axios.get(`http://localhost:8081/api/project/searchSettings/${projectId}`, {
+          headers: {
+            Authorization: `Bearer ${token}`
+          }
+        });
+        setSearchSettings(settingsResponse.data);
+        console.log('Search Settings:', settingsResponse.data);
       } catch (error) {
         console.error('Error fetching data:', error);
       }
@@ -145,14 +154,33 @@ const UpcomingTasks = () => {
     });
   };
 
-  const handleRemoveButtonClick = (taskId, role) => {
-    if (role === 'Leader') {
-      setErrorMessage('Task removed successfully');
+  const handleRemoveButtonClick = async (taskId, role) => {
+    try {
+      if (role === 'Leader') {
+        setErrorMessage('Task removed successfully');
+        setShowError(true);
+
+        const projectId = new URLSearchParams(window.location.search).get("id");
+        const token = localStorage.getItem("token");
+
+        console.log(projectId,taskId);
+        await axios.delete(`http://localhost:8081/api/tasks/project/${projectId}/${taskId}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      setTimeout(() => {
+        window.location.reload();
+      }, 2000);
+
+      } else {
+        setErrorMessage('Only leaders can remove tasks');
+        setShowError(true);
+      }
+    } catch (error) {
+      setErrorMessage('Failed to remove task');
       setShowError(true);
-      console.log(taskId);
-    } else {
-      setErrorMessage('Only leaders can remove tasks');
-      setShowError(true);
+      console.error('Error removing task:', error);
     }
   };
 
@@ -251,7 +279,7 @@ const UpcomingTasks = () => {
         <div className='performers'>
           <TopPerformers />
         </div>
-        {projectRole === 'Leader' && (
+        {(projectRole === 'Leader') && (
       <div className="add-item-button">
         <button onClick={toggleForm}>
           <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" fill="currentColor" class="bi bi-plus-circle-fill" viewBox="0 0 16 16">
@@ -260,6 +288,17 @@ const UpcomingTasks = () => {
           Add Self-Task
         </button>
       </div>
+    )}
+
+    {(projectRole === 'Member' && searchSettings.allowSelfAssignment)&& (
+          <div className="add-item-button">
+            <button onClick={toggleForm}>
+              <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" fill="currentColor" class="bi bi-plus-circle-fill" viewBox="0 0 16 16">
+                <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0M8.5 4.5a.5.5 0 0 0-1 0v3h-3a.5.5 0 0 0 0 1h3v3a.5.5 0 0 0 1 0v-3h3a.5.5 0 0 0 0-1h-3z"/>
+              </svg>
+              Add Self-Task
+            </button>
+          </div>
     )}
      {showSuccess && <SuccessPopup message={successMessage} onClose={handleSuccessClose} />}
     {showError && <ErrorMessagePopup message={errorMessage} onClose={handleErrorClose} />}

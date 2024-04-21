@@ -47,4 +47,14 @@ public class ToDoController {
         toDoListService.disableToDo(todoListId);
         return new ResponseEntity<>(HttpStatus.OK);
     }
+
+    @DeleteMapping("/project/{projectId}/{todoListId}")
+    public ResponseEntity<?> deleteToDoItem(@PathVariable Long projectId,@PathVariable Long todoListId) {
+        try {
+            toDoListService.deleteToDoItem(todoListId, projectId);
+            return ResponseEntity.ok("ToDoItem deleted successfully");
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to delete ToDoItem");
+        }
+    }
 }

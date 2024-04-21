@@ -1,5 +1,3 @@
-// ProjectRolesPieChart.js
-
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { Pie } from 'react-chartjs-2';
@@ -21,8 +19,8 @@ const ProjectRolesPieChart = () => {
     }, []);
 
     return (
-        <div className='container-chart'> 
-            <div className='project-roles-pie-chart' >
+        <div className='graph-chart'> 
+            <div className='project-type-pie' >
                 {chartData ? (
                     <Pie
                         data={{

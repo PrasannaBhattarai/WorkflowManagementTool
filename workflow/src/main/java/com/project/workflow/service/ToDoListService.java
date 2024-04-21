@@ -64,4 +64,9 @@ public class ToDoListService {
         toDoListRepository.markToDoListAsCompleted(toDoItemId);
     }
 
+    public void deleteToDoItem(Long todoListId, Long projectId){
+        toDoListRepository.deleteToDoById(todoListId);
+        projectToDoListRepository.deleteToDoById(todoListId,projectId);
+    }
+
 }

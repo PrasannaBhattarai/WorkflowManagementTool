@@ -12,12 +12,12 @@ import java.util.List;
 public interface TaskRepository extends JpaRepository<Task, Long> {
 
     @Query("SELECT t FROM Task t JOIN t.projectUserTasks put WHERE put.assignedUser.userId = :userId AND t.taskStatus = 'pending'" +
-            "AND put.project.projectId = :projectId AND t.taskDeadline > CURRENT_TIMESTAMP")
+            "AND put.project.projectId = :projectId AND t.taskDeadline > CURRENT_TIMESTAMP ORDER BY t.taskDeadline")
     List<Task> findActiveTasksForUserInProject(@Param("userId") Long userId, @Param("projectId") Long projectId);
 
 
     @Query("SELECT t FROM Task t JOIN t.projectUserTasks pu WHERE (t.taskStatus = 'completed' OR t.taskDeadline < CURRENT_TIMESTAMP)" +
-            "AND pu.assignedUser.userId = :userId AND pu.project.projectId = :projectId")
+            "AND pu.assignedUser.userId = :userId AND pu.project.projectId = :projectId ORDER BY t.taskDeadline")
     List<Task> findDeadlineMissedTasksOrCompletedTasks(@Param("userId") Long userId, @Param("projectId") Long projectId);
 
 
@@ -28,10 +28,17 @@ public interface TaskRepository extends JpaRepository<Task, Long> {
 
 
     @Query("SELECT t FROM Task t JOIN t.projectUserTasks pu WHERE (t.taskStatus = 'completed' OR t.taskDeadline < CURRENT_TIMESTAMP)" +
-            "AND pu.project.projectId = :projectId")
+            "AND pu.project.projectId = :projectId ORDER BY t.taskDeadline")
     List<Task> getAllDeadlineMissedTasksOrCompletedTasks(@Param("projectId") Long projectId);
 
+
     @Query("SELECT t FROM Task t JOIN t.projectUserTasks put WHERE t.taskStatus = 'pending'" +
-            "AND put.project.projectId = :projectId AND t.taskDeadline > CURRENT_TIMESTAMP")
+            "AND put.project.projectId = :projectId AND t.taskDeadline > CURRENT_TIMESTAMP ORDER BY t.taskDeadline")
     List<Task> getAllActiveForGuestInProject(@Param("projectId") Long projectId);
+
+
+    @Modifying
+    @Transactional
+    @Query("DELETE FROM Task t WHERE t.id = :taskId")
+    void deleteByIdAndProjectId(@Param("taskId") Long taskId);
 }

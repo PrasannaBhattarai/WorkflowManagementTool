@@ -133,5 +133,16 @@ public class ProjectService {
         }
     }
 
+    public void closeProject(Long projectId) {
+        Optional<Project> optionalProject = projectRepository.findById(projectId);
+        if (optionalProject.isPresent()) {
+            System.out.println(optionalProject.get().getProjectId());
+            Project project = optionalProject.get();
+            project.setProjectStatus("closed");
+            projectRepository.save(project);
+        } else {
+            throw new RuntimeException("Project with ID " + projectId + " not found");
+        }
+    }
 
 }

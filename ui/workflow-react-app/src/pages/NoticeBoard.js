@@ -18,6 +18,7 @@ const NoticeBoard = () => {
   const [warningMessage, setWarningMessage] = useState('');
   const [showSuccess, setShowSuccess] = useState(false);
   const [successMessage, setSuccessMessage] = useState('');
+  const [searchSettings, setSearchSettings] = useState({});
 
   const fetchAnnouncements = async () => {
     try {
@@ -58,6 +59,26 @@ const NoticeBoard = () => {
       }
     };
 
+    const fetchSettings = async () => {
+      try {
+        const projectId = new URLSearchParams(window.location.search).get("id");
+        const token = localStorage.getItem("token");
+        if (!token) {
+          console.log('No token for search settings');
+          return;
+        }
+        const response = await axios.get(`http://localhost:8081/api/project/searchSettings/${projectId}`, {
+          headers: {
+            Authorization: `Bearer ${token}`
+          }
+        });
+        setSearchSettings(response.data);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+
+    fetchSettings(); 
     fetchProjectUser();
     fetchAnnouncements(); // fetches announcements when component mounts
   }, []);
@@ -184,13 +205,14 @@ const NoticeBoard = () => {
           </div>
         </div>
       )}
-      {!isAddingAnnouncement && (
-        <div className="add-announcement-button-container">
-          {projectRole === 'Leader' && (
-            <button className="add-announcement-button" onClick={handleAddAnnouncement}>Add Announcement</button>
-          )}
-        </div>
-      )}
+    {!isAddingAnnouncement && (
+      <div className="add-announcement-button-container">
+        {(projectRole === 'Leader' || (projectRole === 'Guest' && searchSettings.allowGuestAnnouncements)) && (
+          <button className="add-announcement-button" onClick={handleAddAnnouncement}>Add Announcement</button>
+        )}
+      </div>
+    )}
+
       {announcements.map((announcement) => (
         <div key={announcement.announcementId} className="announcement-card">
           <div>

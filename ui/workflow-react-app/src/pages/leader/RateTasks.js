@@ -116,11 +116,26 @@ const RateTasks = () => {
     setShowWarning(false);
   };
 
-  const handleRemoveTask = (taskId) => {
+  const handleRemoveTask = async (taskId) => {
     console.log("Removing task with ID:", taskId);
     try {
-      setErrorMessage(`Task has been removed.`);
-      setShowErrorMessage(true);
+      const token = localStorage.getItem('token');
+      const projectId = new URLSearchParams(window.location.search).get('id');
+  
+      const response = await axios.delete(`http://localhost:8081/api/tasks/project/${projectId}/${taskId}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      if (response.status === 200) {
+        setErrorMessage(`Task has been removed.`);
+        setShowErrorMessage(true);
+        fetchTasks();
+      }else {
+        console.error("Failed to remove task");
+        setErrorMessage("Failed to remove task. Please try again.");
+        setShowErrorMessage(true);
+      }
     } catch (error) {
       console.error("Error removing task:", error);
       setErrorMessage("Error removing task. Please try again.");

@@ -18,3 +18,13 @@
     max-height: 50vh;
 }
 
+.chart-top-users {
+    flex: 1;
+    margin-right: 20px;
+    margin-bottom: 20px;
+    background-color: rgb(234, 202, 247);
+    text-align: center;
+    max-height: 65vh;
+    padding-bottom: 20px;
+    border-radius: 2vh;
+}

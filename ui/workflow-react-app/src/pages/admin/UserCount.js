@@ -21,7 +21,7 @@ const UserCount = () => {
         <div>
             <h2>User Count</h2>
             {count !== null ? (
-                <p>Total users: {count}</p>
+                <p>Total users: <span className='big-count'>{count}</span></p>
             ) : (
                 <p>Loading...</p>
             )}
